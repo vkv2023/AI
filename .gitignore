@@ -1,8 +1,16 @@
-.idea/
+# Python
 venv/
-.env
 __pycache__/
 *.pyc
+
+# Environment
+.env
+
+# IDE
+.idea/
+
+# OS
+.DS_Store
+
+# Weaviate volume
 weaviate_data/
-Scratches/
-External_Libraries/
