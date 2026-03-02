@@ -15,6 +15,8 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 WEAVIATE_URL = os.getenv("WEAVIATE_URL")
 S3_BUCKET = os.getenv("S3_BUCKET")
+local_path = os.getenv("LOCAL_PATH")
+key = os.getenv("KEY")
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not set")
@@ -24,9 +26,7 @@ if not OPENAI_API_KEY:
 # =========================
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 weaviate_client = weaviate.Client(WEAVIATE_URL)
-s3 = boto3.client("s3")
-
-CLASS_NAME = "EnterpriseDocument"
+CLASS_NAME = "JavaAwsDocuments"
 
 # =========================
 # CREATE SCHEMA IF NOT EXISTS
@@ -42,29 +42,50 @@ if not weaviate_client.schema.exists(CLASS_NAME):
         ]
     }
     weaviate_client.schema.create_class(schema)
-    print("Schema created")
+    print("Schema created", CLASS_NAME)
 
 
 # =========================
 # STEP 1 — DOWNLOAD FROM S3
 # =========================
 def download_from_s3(key, local_path):
-    s3.download_file(S3_BUCKET, key, local_path)
+    session = boto3.session.Session(
+        profile_name="cli-user",
+        region_name="us-east-1"
+    )
+    print("-" * 40)
+    print(session.profile_name, session.region_name, session.available_profiles,
+          # session.get_available_services(),session.get_available_partitions()
+          session.get_available_regions(service_name="s3")
+          )
+    s3_client = session.client("s3")
+    print("-" * 40)
+    os.makedirs(local_path, exist_ok=True)
+    full_path = os.path.join(local_path, key)
+
+    if os.path.isfile(full_path):
+        print("File already exists. Skipping download.")
+        return full_path
+
+    s3_client.download_file(S3_BUCKET, key, full_path)
+
+    print(f"Downloaded to {full_path}")
     print(f"Downloaded {key}")
+    return full_path  # return actual file path
 
 
 # =========================
 # STEP 2 — EXTRACT TEXT
 # =========================
-def extract_text(file_path):
-    if file_path.endswith(".pdf"):
-        reader = PdfReader(file_path)
+def extract_text(full_path):
+    if full_path.endswith(".pdf"):
+        reader = PdfReader(full_path)
         text = ""
         for page in reader.pages:
             text += page.extract_text() + "\n"
         return text
     else:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(full_path, "r", encoding="utf-8") as f:
             return f.read()
 
 
@@ -112,11 +133,12 @@ def store_chunks(chunks, embeddings, source, department="general"):
 # =========================
 # INGEST PIPELINE
 # =========================
-def ingest_document(s3_key, department="general"):
-    local_file = "temp_document"
-    download_from_s3(s3_key, local_file)
+def ingest_document(s3_key, department="java"):
+    file_path = download_from_s3(s3_key, local_path)  # use .env path
 
-    text = extract_text(local_file)
+    print("Reading file:", file_path)  # debug check
+
+    text = extract_text(file_path)
     chunks = chunk_text(text)
 
     print(f"Total chunks: {len(chunks)}")
@@ -129,10 +151,19 @@ def ingest_document(s3_key, department="general"):
 # STEP 6 — HYBRID SEARCH
 # =========================
 def search(question, department_filter=None):
+
+    # Embed the question first
+    question_embedding = openai_client.embeddings.create(
+        model="text-embedding-3-small",
+        input=question
+    ).data[0].embedding
+
     query = (
         weaviate_client.query
         .get(CLASS_NAME, ["content", "source"])
-        .with_hybrid(query=question, alpha=0.5)
+        .with_near_vector({
+            "vector": question_embedding
+        })
         .with_limit(5)
     )
 
@@ -144,7 +175,12 @@ def search(question, department_filter=None):
         })
 
     result = query.do()
-    return result["data"]["Get"][CLASS_NAME]
+
+    try:
+        print(weaviate_client.query.get(CLASS_NAME, ["content"]).with_limit(2).do())
+        return result["data"]["Get"][CLASS_NAME] or []
+    except (KeyError, TypeError):
+        return []
 
 
 # =========================
@@ -169,19 +205,29 @@ def generate_answer(question, retrieved_docs):
 # =========================
 if __name__ == "__main__":
 
-    # ---------- INGEST ----------
-    # Example S3 file
-    # ingest_document("policies/finance_policy.pdf", department="finance")
+    # ---------- INPUT FROM USER ----------=
+    while True:
+        question = input("\nAsk a question (type 'exit' to quit): ")
 
-    # ---------- QUERY ----------
-    question = "What is the finance approval process?"
-    retrieved = search(question, department_filter="finance")
+        if question.lower() == "exit":
+            print("Exiting...")
+            break
+        department = input("Enter department (e.g., java): ").strip().lower()
 
-    print("\nRetrieved Docs:")
-    for r in retrieved:
-        print("-", r["source"])
+        # ---------- INGEST ----------
+        ingest_document("SofwareArchitectureDesignPattern.pdf", department=department)  # case fixed
 
-    answer = generate_answer(question, retrieved)
+        # ---------- QUERY ----------
+        retrieved = search(question, department_filter=department)  # same case
 
-    print("\nAnswer:")
-    print(answer)
+        if not retrieved:
+            print("No documents found.")
+        else:
+            print("\nRetrieved Docs:")
+            for r in retrieved:
+                print("-", r["source"])
+
+            answer = generate_answer(question, retrieved)
+
+            print("\nAnswer:")
+            print(answer)
