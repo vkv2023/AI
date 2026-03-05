@@ -1,0 +1,6 @@
+weaviate-client>=3.26.7,<4.0.0
+fastapi
+uvicorn
+openai~=2.24.0
+python-dotenv
+Flask~=3.1.0
