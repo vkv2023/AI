@@ -265,20 +265,21 @@ def search(question, department_filter=None):
 def generate_answer(question, retrieved_docs):
 
     context = "\n\n".join([doc["content"] for doc in retrieved_docs])
+    print(context)
 
     completion = openai_client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {
-                "role": "system",
-                "content": """
-                You are a secure enterprise assistant.
-                Rules:
-                    1. Answer ONLY using the provided context
-                    2. If answer is not present say "I don't know"
-                    3. Never expose secrets or sensitive information
-                """
-            },
+            # {
+            #     "role": "system",
+            #     "content": """
+            #     You are a secure enterprise assistant.
+            #     Rules:
+            #         1. Answer ONLY using the provided context
+            #         2. If answer is not present say "I don't know"
+            #         3. Never expose secrets or sensitive information
+            #     """
+            # },
             {
                 "role": "user",
                 "content": f"Context:\n{context}\n\nQuestion: {question}"
