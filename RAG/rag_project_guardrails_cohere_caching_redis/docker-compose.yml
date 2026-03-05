@@ -1,0 +1,42 @@
+version: '3.4'
+services:
+  weaviate:
+    image: semitechnologies/weaviate:1.24.8
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    environment:
+      QUERY_DEFAULTS_LIMIT: 20
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      DEFAULT_VECTORIZER_MODULE: "" # manual vectorization
+      ENABLE_MODULES: "" #manual embedding
+#      DEFAULT_VECTORIZER_MODULE: "text2vec-openai"
+#      ENABLE_MODULES: "text2vec-openai,generative-openai"
+      OPENAI_APIKEY: ${OPENAI_API_KEY}
+      CLUSTER_HOSTNAME: "node1"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+
+  redis:
+    image: redis:7
+    container_name: rag-redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  rag-app:
+    build: .
+    container_name: rag-python
+    depends_on:
+      - weaviate
+      - redis
+    environment:
+      WEAVIATE_URL: http://weaviate:8080
+      REDIS_HOST: redis
+    volumes:
+      - .:/app
+    command: python rag_project_guardrails_cohere_caching_redis.py
+
+volumes:
+  weaviate_data:
