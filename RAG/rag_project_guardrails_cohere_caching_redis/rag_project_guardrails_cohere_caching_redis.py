@@ -21,8 +21,8 @@ S3_BUCKET = os.getenv("S3_BUCKET")
 local_path = os.getenv("LOCAL_PATH")
 key = os.getenv("KEY")
 COHERE_KEY = os.getenv("COHERE_KEY")
-REDIS_HOST = os.getenv("REDIS_HOST", "redis")
-REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+REDIS_HOST = os.getenv("REDIS_HOST")
+REDIS_PORT = int(os.getenv("REDIS_PORT"))
 CACHE_TTL = int(os.getenv("CACHE_TTL"))
 
 if not OPENAI_API_KEY:
@@ -39,8 +39,9 @@ weaviate_client = weaviate.Client(WEAVIATE_URL)
 cohere_client = cohere.Client(COHERE_KEY)
 CLASS_NAME = "JavaAwsDocuments"
 redis_client = redis.Redis(
-    host=REDIS_HOST,
-    port=REDIS_PORT,
+    host="localhost",
+    port=6379,
+    db=0,
     decode_responses=True
 )
 
