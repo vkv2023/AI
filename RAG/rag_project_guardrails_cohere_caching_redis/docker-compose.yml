@@ -25,18 +25,18 @@ services:
       - "6379:6379"
     restart: always
 
-  rag-app:
-    build: .
-    container_name: rag-python
-    depends_on:
-      - weaviate
-      - redis
-    environment:
-      WEAVIATE_URL: http://weaviate:8080
-      REDIS_HOST: redis
-    volumes:
-      - .:/app
-    command: python rag_project_guardrails_cohere_caching_redis.py
+#  rag-app:
+#    build: .
+#    container_name: rag-python
+#    depends_on:
+#      - weaviate
+#      - redis
+#    environment:
+#      WEAVIATE_URL: http://weaviate:8080
+#      REDIS_HOST: redis
+#    volumes:
+#      - .:/app
+#    command: python rag_project_guardrails_cohere_caching_redis.py
 
 volumes:
   weaviate_data:

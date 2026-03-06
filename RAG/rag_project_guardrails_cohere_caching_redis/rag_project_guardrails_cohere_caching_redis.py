@@ -9,7 +9,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pypdf import PdfReader
 import redis
 
-
 # =========================
 # LOAD ENV VARIABLES
 # =========================
@@ -25,9 +24,11 @@ REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = int(os.getenv("REDIS_PORT"))
 CACHE_TTL = int(os.getenv("CACHE_TTL"))
 
+# Check OPENAI_API_KEY
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not set")
 
+# Check COHERE_API_KEY
 if not COHERE_KEY:
     raise ValueError("COHERE_API_KEY is not set")
 
@@ -45,11 +46,18 @@ redis_client = redis.Redis(
     decode_responses=True
 )
 
+
+# =============================
+# Get Cached Answer from REDIS
+# =============================
 def get_cached_answer(question, department):
     key = f"{department}:{question}"
     return redis_client.get(key)
 
 
+# =============================
+# Set Cached Answer from REDIS
+# =============================
 def cache_answer(question, department, answer):
     key = f"{department}:{question}"
     redis_client.set(key, answer, ex=CACHE_TTL)
@@ -60,7 +68,6 @@ def cache_answer(question, department, answer):
 # INPUT GUARDRAIL
 # =========================
 def input_guardrail(question):
-
     banned_patterns = [
         "ignore previous instructions",
         "reveal secrets",
@@ -83,7 +90,6 @@ def input_guardrail(question):
 # RETRIEVAL GUARDRAIL
 # =========================
 def retrieval_guardrail(docs):
-
     filtered_docs = []
 
     banned_terms = [
@@ -106,7 +112,6 @@ def retrieval_guardrail(docs):
 # OUTPUT GUARDRAIL
 # =========================
 def output_guardrail(answer):
-
     banned_patterns = [
         "password",
         "api_key",
@@ -120,6 +125,7 @@ def output_guardrail(answer):
 
     return answer
 
+
 # =========================
 # ===== COHERE =====
 #    RE-RANKED DOCS
@@ -128,18 +134,19 @@ def reranked_documents(query, docs):
     documents = [doc["content"] for doc in docs]
 
     response = cohere_client.rerank(
-        model = "rerank-english-v3.0",
+        model="rerank-english-v3.0",
         query=query,
         documents=documents,
         top_n=3
     )
 
-    reranked_docs=[]
+    reranked_docs = []
 
     for result in response.results:
         reranked_docs.append(docs[result.index])
 
     return reranked_docs
+
 
 # =========================
 # CREATE SCHEMA IF NOT EXISTS
@@ -162,7 +169,6 @@ if not weaviate_client.schema.exists(CLASS_NAME):
 # STEP 1 — DOWNLOAD FROM S3
 # =========================
 def download_from_s3(key, local_path):
-
     session = boto3.session.Session(
         profile_name="cli-user",
         region_name="us-east-1"
@@ -187,7 +193,6 @@ def download_from_s3(key, local_path):
 # STEP 2 — EXTRACT TEXT
 # =========================
 def extract_text(full_path):
-
     if full_path.endswith(".pdf"):
 
         reader = PdfReader(full_path)
@@ -208,7 +213,6 @@ def extract_text(full_path):
 # STEP 3 — CHUNKING
 # =========================
 def chunk_text(text, chunk_size=800, chunk_overlap=150):
-
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap
@@ -221,7 +225,6 @@ def chunk_text(text, chunk_size=800, chunk_overlap=150):
 # STEP 4 — EMBEDDING
 # =========================
 def embed_chunks(chunks):
-
     response = openai_client.embeddings.create(
         model="text-embedding-3-small",
         input=chunks
@@ -234,11 +237,8 @@ def embed_chunks(chunks):
 # STEP 5 — STORE IN WEAVIATE
 # =========================
 def store_chunks(chunks, embeddings, source, department="general"):
-
     with weaviate_client.batch as batch:
-
         for chunk, vector in zip(chunks, embeddings):
-
             batch.add_data_object(
                 data_object={
                     "content": chunk,
@@ -257,7 +257,6 @@ def store_chunks(chunks, embeddings, source, department="general"):
 # INGEST PIPELINE
 # =========================
 def ingest_document(s3_key, department="java"):
-
     file_path = download_from_s3(s3_key, local_path)
 
     print("Reading file:", file_path)
@@ -277,7 +276,6 @@ def ingest_document(s3_key, department="java"):
 # STEP 6 — VECTOR SEARCH
 # =========================
 def search(question, department_filter=None):
-
     question_embedding = openai_client.embeddings.create(
         model="text-embedding-3-small",
         input=question
@@ -309,7 +307,6 @@ def search(question, department_filter=None):
 # STEP 7 — LLM ANSWER
 # =========================
 def generate_answer(question, retrieved_docs):
-
     context = "\n\n".join([doc["content"] for doc in retrieved_docs])
 
     completion = openai_client.chat.completions.create(
@@ -342,7 +339,11 @@ if __name__ == "__main__":
 
     while True:
 
-        question = input("\nAsk a question (type 'exit' to quit): ").strip().lower()
+        try:
+            question = input("\nAsk a question (type 'exit' to quit): ").strip().lower()
+        except EOFError:
+            print("\nNo interactive input available. Exiting...")
+            break
 
         if question.lower() == "exit":
             print("Exiting...")
@@ -351,7 +352,7 @@ if __name__ == "__main__":
         department = input("\nEnter department (e.g., java): ").strip().lower()
 
         # =========================
-        # # 1. Check cache
+        # # 1. Query cache first
         # =========================
         cached = get_cached_answer(question, department)
 
@@ -387,7 +388,7 @@ if __name__ == "__main__":
         # =========================
         # Re-ranking retrieved docs
         # =========================
-        reranked_docs = reranked_documents(question,retrieved)
+        reranked_docs = reranked_documents(question, retrieved)
 
         # =====================================
         # RETRIEVAL GUARDRAIL on reranked docs
@@ -412,7 +413,9 @@ if __name__ == "__main__":
         # =========================
         final_answer = output_guardrail(answer)
 
-        # 6. Store in cache
+        # =========================
+        # Store Answer in Cache
+        # =========================
         cache_answer(question, department, final_answer)
 
         print("\nAnswer:")
