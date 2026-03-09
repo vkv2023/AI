@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-
   build:
 
     runs-on: ubuntu-latest
@@ -27,17 +26,13 @@ jobs:
         aws-region: us-east-1
 
     - name: Login to ECR
-      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build Docker Image
-      run: |
-        docker build -t ai-platform ./ai-platform -f ai-platform/docker/Dockerfile
+      run: docker build -t ai-platform .
 
     - name: Tag Image
-      run: |
-        docker tag ai-platform:latest ${{ steps.login-ecr.outputs.registry }}/ai-platform:latest
+      run: docker tag ai-platform:latest 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:latest
 
-    - name: Push Image to ECR
-      run: |
-        docker push ${{ steps.login-ecr.outputs.registry }}/ai-platform:latest
+    - name: Push Image
+      run: docker push 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:latest
