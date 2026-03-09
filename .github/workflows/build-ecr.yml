@@ -39,4 +39,4 @@ jobs:
       run: docker tag ai-platform:${{ github.sha }} 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:${{ github.sha }}
 
     - name: Push Image
-      run: docker push 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai-platform:${{ github.sha }}
+      run: docker push 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:${{ github.sha }}
