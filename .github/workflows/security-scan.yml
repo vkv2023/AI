@@ -17,4 +17,4 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
 #        image-ref: ai-platform:${{ github.event.workflow_run.head_sha }}
-         image-ref: 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai-platform:${{ github.event.workflow_run.head_sha }}
+         image-ref: 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:${{ github.event.workflow_run.head_sha }}
