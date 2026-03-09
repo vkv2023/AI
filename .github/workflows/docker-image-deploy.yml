@@ -29,8 +29,8 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build Docker Image
-      run: docker build -t ai-platform .
-
+      run: docker build -t ai-platform ./ai-platform -f ai-platform/docker/Dockerfile
+      
     - name: Tag Image
       run: docker tag ai-platform:latest 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:latest
 
