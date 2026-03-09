@@ -1,0 +1,34 @@
+name: Application Health Check
+
+on:
+  workflow_run:
+    workflows: ["Deploy to ECS"]
+    types:
+      - completed
+
+jobs:
+
+  health-check:
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Wait for ECS deployment
+      run: sleep 60
+
+#      Load Balancer DNS - ai-platform-alb-123456.us-east-1.elb.amazonaws.com
+#      Replace the same for production
+    - name: Check Application Health
+      run: URL="http://Load Balancer DNS/health"
+
+        STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
+
+        if [ "$STATUS" -ne 200 ]; then
+          echo "Application is unhealthy"
+          exit 1
+        fi
+
+        echo "Application is healthy"

@@ -15,5 +15,4 @@ weaviate_data/
 __pycache__
 *.pyc
 tests
-.github/
 

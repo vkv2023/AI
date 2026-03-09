@@ -1,0 +1,26 @@
+name: Build Docker Image
+
+on:
+  workflow_run:
+    workflows: ["Run Tests"]
+    types:
+      - completed
+
+jobs:
+
+  build:
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+#    - name: Build Docker Image
+#      run: docker build -t ai-platform:${{ github.sha }} .
+
+    - name: Build Docker Image
+      run: docker build -t ai-platform:${{ github.sha }} ./ai-platform -f ai-platform/docker/Dockerfile

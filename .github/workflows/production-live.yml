@@ -1,0 +1,21 @@
+name: Production Live
+
+on:
+  workflow_run:
+    workflows: ["Application Health Check"]
+    types:
+      - completed
+
+jobs:
+
+  production:
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Deployment Success
+      run: |
+        echo "Application successfully deployed to production!"
