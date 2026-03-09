@@ -6,6 +6,10 @@ on:
     types:
       - completed
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
 
   scan:
@@ -13,8 +17,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::632804446443:role/github-actions-ecr-role
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      run: |
+        aws ecr get-login-password --region us-east-1 \
+        | docker login --username AWS --password-stdin \
+        632804446443.dkr.ecr.us-east-1.amazonaws.com
+
     - name: Scan Image with Trivy
       uses: aquasecurity/trivy-action@master
       with:
-#        image-ref: ai-platform:${{ github.event.workflow_run.head_sha }}
-         image-ref: 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:${{ github.event.workflow_run.head_sha }}
+        image-ref: 632804446443.dkr.ecr.us-east-1.amazonaws.com/ai/ai-platform:${{ github.event.workflow_run.head_sha }}
+        format: table
+        exit-code: 1
+        ignore-unfixed: true
+        severity: CRITICAL,HIGH
