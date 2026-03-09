@@ -2,15 +2,18 @@
 venv/
 __pycache__/
 *.pyc
-
 # Environment
 .env
-
 # IDE
 .idea/
-
 # OS
 .DS_Store
-
 # Weaviate volume
 weaviate_data/
+.git
+.gitignore
+__pycache__
+*.pyc
+tests
+.github/
+

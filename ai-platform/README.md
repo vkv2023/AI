@@ -82,3 +82,22 @@ Redis Cache                 Weaviate
                 |
                 v
               Answer
+
+
+Production workflow  (CI/CD)
+=============================
+
+Developer Push
+     ↓
+GitHub
+     ↓
+GitHub Actions (CI/CD)
+     ↓
+Build Docker Image
+     ↓
+Push Image → AWS ECR
+     ↓
+Lightsail Server
+docker pull image
+docker-compose up
+run the app 
