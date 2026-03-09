@@ -10,3 +10,4 @@ redis
 cohere
 fastapi
 uvicorn
+pytest

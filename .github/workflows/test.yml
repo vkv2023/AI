@@ -23,6 +23,8 @@ jobs:
     - name: Install Dependencies
       run: pip install -r ai-platform/docker/requirements.txt
 
-    - name: Run Tests
-      run: |
-        pytest
+    - name: Install pytest
+      run: pip install pytest
+
+    - name: Run tests
+      run: pytest
