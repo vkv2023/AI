@@ -1,25 +1,34 @@
-from app.database.redis_cache import get_cache, set_cache
-from app.services.query_rewriter import rewrite_query
-from app.services.hybrid_search import search_docs
-from app.services.reranker import rerank_docs
-from app.services.model_router import generate_answer
+from app.services.query_rewriter import QueryRewriter
 
+class RAGPipeline:
+    def __init__(self):
+        self.query_rewriter = QueryRewriter()
+        # other components
+        self.input_guard = InputGuardrail()
+        self.retrieval_guard = RetrievalGuardrail()
+        self.output_guard = OutputGuardrail()
+        self.search = HybridSearch()
+        self.reranker = CohereReranker()
+        self.router = ModelRouter()
 
-def run_rag(question):
+    async def run_rag(self, question: str):
+        # 1 Input guardrail
+        safe_question = self.input_guard.validate(question)
 
-    cached = get_cache(question)
+        # 2 Rewrite query
+        rewritten_question = self.query_rewriter.rewrite(safe_question)
 
-    if cached:
-        return cached
+        # 3 Retrieval
+        retrieved_docs = self.search.query(rewritten_question)
+        filtered_docs = self.retrieval_guard.filter(retrieved_docs)
 
-    rewritten = rewrite_query(question)
+        # 4 Rerank
+        ranked_docs = self.reranker.rerank(rewritten_question, filtered_docs)
 
-    docs = search_docs(rewritten)
+        # 5 Model routing
+        answer = self.router.route(rewritten_question, ranked_docs)
 
-    ranked = rerank_docs(rewritten, docs)
+        # 6 Output guardrail
+        final_answer = self.output_guard.apply(answer)
 
-    answer = generate_answer(rewritten, ranked)
-
-    set_cache(question, answer)
-
-    return answer
+        return final_answer

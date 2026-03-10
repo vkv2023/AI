@@ -1,9 +1,12 @@
 from fastapi import FastAPI
-from app.api.routes import routes
+from app.api.routes import router
+from app.core.config import settings
 
-app = FastAPI(
-    title="AI Platform",
-    version="1.0"
-)
+app = FastAPI(title="AI Platform")
 
-app.include_router(routes)
+# Include API routes
+app.include_router(router)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "app": "ai-platform"}

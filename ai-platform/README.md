@@ -44,6 +44,7 @@ ai-property-platform/   ← Project root (not necessarily a package)
 ├── docker/
 │   ├── Dockerfile
 │   └── docker-compose.yml
+    ├── requirements.txt
 │
 ├── scripts/
 │   ├── ingest_data.py
@@ -51,7 +52,7 @@ ai-property-platform/   ← Project root (not necessarily a package)
 │
 ├── tests/
 │
-├── requirements.txt
+
 ├── .env
 └── README.md
 
