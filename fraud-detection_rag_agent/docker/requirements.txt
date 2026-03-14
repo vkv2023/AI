@@ -1,0 +1,5 @@
+weaviate-client
+redis
+sentence-transformers
+fastapi
+uvicorn
