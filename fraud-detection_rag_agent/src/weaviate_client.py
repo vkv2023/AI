@@ -1,12 +1,9 @@
 import weaviate
-# from weaviate.connect import ConnectionParams
 
 client = weaviate.Client("http://localhost:8080")
 
-client = weaviate.WeaviateClient(
-    connection_params=Connection
-
 def create_schema():
+
     schema = {
         "class": "FraudCase",
         "vectorizer": "none",
