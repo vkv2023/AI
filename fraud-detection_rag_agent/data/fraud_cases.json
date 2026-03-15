@@ -1,0 +1,22 @@
+[
+  {
+    "description": "High value purchase from new device in foreign country",
+    "label": "fraud"
+  },
+  {
+    "description": "Multiple rapid transactions within 1 minute",
+    "label": "fraud"
+  },
+  {
+    "description": "Online purchase from unusual location",
+    "label": "fraud"
+  },
+  {
+    "description": "Normal grocery purchase from usual location",
+    "label": "legit"
+  },
+  {
+    "description": "Monthly subscription payment",
+    "label": "legit"
+  }
+]
