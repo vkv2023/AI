@@ -6,6 +6,11 @@ from redis_cache import get_cache, set_cache
 app = FastAPI()
 
 
+@app.get("/")
+def root():
+    return {"status": "Fraud RAG agent running"}
+
+
 @app.post("/check_transaction")
 def check_transaction(data: dict):
     description = data["description"]

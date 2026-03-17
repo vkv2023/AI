@@ -20,3 +20,22 @@ fraud-rag-agent/
 │   └── rag_reasoner.py
 │
 └── README.md
+
+1- Start Infra (Docker) from docker folder:
+    docker compose up -d
+2- Go to Source Folder
+    cd ..\src
+3- Run API
+    python -m uvicorn app:app --reload
+4- Open API
+    http://127.0.0.1:8000/docs
+
+
+        Docker Compose → Infra only
+            ↓
+        Weaviate (8080)
+        Redis (6379)
+        
+        Python App → runs separately
+            ↓
+        FastAPI (8000)
