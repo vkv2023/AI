@@ -2,6 +2,7 @@
 from app.core.config import settings
 import boto3
 
+
 class Embeddings:
     def __init__(self):
         self.client = boto3.client("bedrock-runtime")

@@ -1,8 +1,8 @@
 from embeddings import generate_embedding
 from weaviate_client import client
 
-def retrieve_similar_cases(transaction):
 
+def retrieve_similar_cases(transaction):
     vector = generate_embedding(transaction)
 
     result = client.query.get(

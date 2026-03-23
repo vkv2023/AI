@@ -61,14 +61,14 @@ ai-property-platform/   ← Project root (not necessarily a package)
 HIgh level Architecture 
 ==========================
 
-User
- |
-CloudFront
- |
-S3 Static Website
- |
-FastAPI (Lightsail Docker)
- |
+                User
+                 |
+                CloudFront
+                 |
+                S3 Static Website
+                 |
+                FastAPI (Lightsail Docker)
+                 |
  |-------------------------------|
  |                               |
 Redis Cache                 Weaviate

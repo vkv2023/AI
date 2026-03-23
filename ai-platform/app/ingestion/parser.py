@@ -1,10 +1,12 @@
 import io
 from PyPDF2 import PdfReader
 
+
 class Parser:
     """
     Parse documents: PDF or raw text
     """
+
     def parse(self, docs):
         """
         docs: list of tuples [(name, content)]

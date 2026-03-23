@@ -1,6 +1,7 @@
 from app.database.weaviate_client import WeaviateClient
 from app.database.redis_cache import RedisCache
 
+
 class HybridSearch:
     def __init__(self):
         self.vector_db = WeaviateClient()

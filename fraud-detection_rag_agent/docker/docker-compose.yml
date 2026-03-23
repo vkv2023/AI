@@ -13,6 +13,6 @@ services:
       DEFAULT_VECTORIZER_MODULE: "none"
 
   redis:
-    image: redis:latest
+    image: redis:7-alpine
     ports:
       - "6379:6379"

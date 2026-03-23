@@ -3,12 +3,14 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
+
 class Crawler:
     """
     Crawl documents from:
       - S3 buckets
       - Public websites
     """
+
     def __init__(self, s3_bucket=None, web_urls=None):
         self.s3_bucket = s3_bucket
         self.web_urls = web_urls or []
