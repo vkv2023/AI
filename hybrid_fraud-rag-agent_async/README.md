@@ -2,18 +2,15 @@
 
 
 
-# 🚀 Fraud Detection RAG Agent (Hybrid GenAI System)
+# Fraud Detection RAG Agent (Hybrid GenAI System)
 
-A **Fraud Detection Agent using RAG (Retrieval-Augmented Generation)** helps detect suspicious transactions 
-by combining:
+A **Fraud Detection Agent using RAG (Retrieval-Augmented Generation) 
+helps detect suspicious transactions by combining:
+     * Real-time transaction data (APIs)
+     * Historical fraud cases (Weaviate vector DB)
+     * AI reasoning (OpenAI LLM)
 
-* Real-time transaction data (APIs)
-* Historical fraud cases (Weaviate vector DB)
-* AI reasoning (OpenAI LLM)
-
----
-
-# 📁 Project Structure
+# Project Structure
 
 fraud-rag-agent/
 │
