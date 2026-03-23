@@ -54,7 +54,10 @@ fraud-rag-agent/
 │       └── helpers.py            # Common utilities
 │
 └── README.md
-# ️ System Architecture (Simplified)
+
+
+# ️ System Architecture
+
     User → FastAPI → Orchestrator
                     ↓
      --------------------------------
@@ -65,9 +68,8 @@ fraud-rag-agent/
                     ↓
                  Response
 
-Async:
+# Async:
 Kafka → Consumer → Embeddings → Weaviate
----
 
 # Infrastructure (Docker Only)
 
@@ -79,13 +81,12 @@ Kafka → Consumer → Embeddings → Weaviate
 
 App runs separately (clean separation)
 
-# ⚙️ How to Run the System
+# How to Run the System
 
 ##   Start Infra
 
 cd docker
 docker compose up -d
----
 
 ## Load Initial Data (Optional)
 
@@ -111,7 +112,6 @@ http://127.0.0.1:8000/docs
 5. Build prompt
 6. Call OpenAI LLM
 7. Cache result in Redis
----
 
 ## Data Ingestion Flow
 
@@ -128,16 +128,11 @@ http://127.0.0.1:8000/docs
 * Modular architecture (clean separation)
 
 
-# 💡  One-Liner
-
-> “This is a hybrid GenAI fraud detection system combining RAG with real-time API grounding, 
-> backed by Redis caching and Kafka-driven ingestion, with OpenAI handling reasoning.”
-
+# This is a hybrid GenAI fraud detection system combining RAG with real-time API grounding, backed by Redis caching and Kafka-driven ingestion, with OpenAI handling reasoning.”
 
 # Future Enhancements
-
-* Semantic cache (embedding-based Redis)
-* Multi-agent fraud detection
-* Model routing (cost optimization)
-* Observability (logs + tracing)
+  * Semantic cache (embedding-based Redis)
+  * Multi-agent fraud detection
+  * Model routing (cost optimization)
+  * Observability (logs + tracing)
 
