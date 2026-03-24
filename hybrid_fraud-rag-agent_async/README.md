@@ -23,15 +23,15 @@ fraud-rag-agent/
 │
 ├── src/
 │   ├── app.py                    # FastAPI entrypoint
-│   ├── config.py                 # Env configs (API keys, URLs)
+│   ├── configurations.py                 # Env configs (API keys, URLs)
 │   │
 │   ├── orchestrator/
 │   │   └── agent.py              # Main routing logic (RAG vs API)
 │   │
-│   ├── llm/
+│   ├── llm_core/
 │   │   └── openai_client.py      # OpenAI integration
 │   │
-│   ├── rag/
+│   ├── fraud_rag/
 │   │   ├── embeddings.py         # Embedding generation
 │   │   ├── weaviate_client.py    # Vector DB operations
 │   │   ├── rag_reasoner.py       # Context + prompt builder
@@ -44,11 +44,13 @@ fraud-rag-agent/
 │   │   ├── kafka_producer.py     # Send documents/events
 │   │   └── ingest_data.py        # Initial data load
 │   │
-│   ├── services/
+│   ├── services_detect/
 │   │   └── fraud_api.py          # Mock payment/order APIs
 │   │
 │   └── utils/
 │       └── helpers.py            # Common utilities
+    └── tests/
+│       └── test_api.py            # test_api 
 │
 └── README.md
 
@@ -133,3 +135,97 @@ http://127.0.0.1:8000/docs
   * Model routing (cost optimization)
   * Observability (logs + tracing)
 
+                    Internet (Users)
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │   API Gateway        │
+                 │ (Auth, Rate Limit)   │
+                 └─────────┬────────────┘
+                           │
+                           ▼
+            ┌──────────────────────────────┐
+            │   GenAI Orchestrator         │
+            │ (ECS / EKS / FastAPI)       │
+            └───────┬───────────┬─────────┘
+                    │           │
+        ┌───────────▼───┐   ┌───▼────────────┐
+        │   RAG Flow     │   │ API Grounding  │
+        │ (Weaviate DB)  │   │ (Microservices)│
+        └───────┬────────┘   └──────┬────────┘
+                │                   │
+        ┌───────▼────────┐   ┌──────▼────────┐
+        │ Vector Search  │   │ Order/Payment │
+        │ + Embeddings   │   │ Services      │
+        └───────┬────────┘   └───────────────┘
+                │
+                ▼
+        ┌───────────────┐
+        │   Prompt       │
+        │ Augmentation   │
+        └──────┬────────┘
+               ▼
+     ┌──────────────────────┐
+     │ OpenAI ChatGPT API   │
+     │ (LLM Inference)      │
+     └─────────┬────────────┘
+               ▼
+           Response
+               │
+               ▼
+        ┌───────────────┐
+        │ Redis Cache   │
+        │ (Response +   │
+        │ Semantic)     │
+        └───────────────┘
+
+
+Async Pipeline (Kafka / MSK):
+Docs → Kafka → Processor → Embeddings → Weaviate
+
+[//]: # (Create Kafka Topic )
+
+kafka-topics --create \
+  --topic fraud-events \
+  --bootstrap-server localhost:9092 \
+  --partitions 1 \
+  --replication-factor 1
+
+===========================
+Run the ingestion script 
+===========================
+PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async> python -m src.ingestion.ingest_data
+http://localhost:8080
+Schema already exists
+Ingesting 7 records...
+Ingestion complete
+PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async>
+
+==================================
+to test your orchestrator service 
+==================================
+Terminal 1 (The Server): uvicorn src.app:app --reload
+Terminal 2 (The Tester): python test_api.py
+
+    FastAPI (app.py): Receives the JSON request.
+    Orchestrator (agent.py): Coordinates the logic.
+    RAG Reasoner (rag_reasoner.py): Triggers a search.
+    Weaviate Client (weaviate_client.py): Fetches similar fraud patterns from your vector DB.
+    LLM Core (llm_client.py): Takes the retrieved data and the query to generate a human-like fraud analysis.
+
+=====================================================================================
+Output
+1- goes through API GW and store the reults in Redis
+2- it goes and check in RAG vector DB, with no results. 
+=======================================================================================
+PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests> python test_api.py
+Sending Query: Check for suspicious patterns in transaction TXN_9988
+Success!
+Response: {
+  "source": "API",
+  "response": "Transaction Info: Transaction flagged: unusual location + high amount"
+}
+Sending Query: What is the fraud risk level for user 'Vinod'?   
+Failed with status code: 500
+Internal Server Error
+PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests>

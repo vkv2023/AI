@@ -1,6 +1,9 @@
 fastapi
 uvicorn
 openai
-confluent-kafka
-weaviate-client>=3.26.7 < 4.0.0
 redis
+weaviate-client>=3.26.7,<4.0.0
+confluent-kafka
+pytest
+tenacity
+dotenv
