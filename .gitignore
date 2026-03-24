@@ -14,5 +14,4 @@ weaviate_data/
 .gitignore
 __pycache__
 *.pyc
-tests
 
