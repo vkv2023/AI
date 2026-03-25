@@ -33,13 +33,13 @@ async def create_schema():
             Property(name="metadata", data_type=DataType.TEXT),
         ]
     )
-    print("✅ Schema created successfully.")
+    print("Schema created successfully.")
 
 
 async def ingest_data(file_path="data/fraud_cases.json"):
     """Loads JSON and performs an async insert_many."""
     if not os.path.exists(file_path):
-        print(f"❌ Error: Data file not found at {file_path}")
+        print(f"Error: Data file not found at {file_path}")
         return
 
     with open(file_path, "r") as f:
@@ -72,11 +72,11 @@ async def ingest_data(file_path="data/fraud_cases.json"):
     response = await fraud_coll.data.insert_many(objects_to_insert)
 
     if response.has_errors:
-        print("❌ Ingestion errors occurred:")
+        print("Ingestion errors occurred:")
         for error in response.errors:
             print(f"- {error}")
     else:
-        print(f"✅ Successfully ingested {len(objects_to_insert)} objects.")
+        print(f"Successfully ingested {len(objects_to_insert)} objects.")
 
 
 async def main():
@@ -88,7 +88,7 @@ async def main():
         await ingest_data()
 
     except Exception as e:
-        print(f"❌ Critical Error: {e}")
+        print(f"Critical Error: {e}")
     finally:
         await client.close()
 

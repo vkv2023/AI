@@ -7,7 +7,7 @@ async def get_transaction_data(query):
     # allows the 'await' in agent.py to work.
 
     # Simulating an API call
-    data ="Transaction flagged: unusual location or high amount"
+    data = "Transaction flagged: unusual location or high amount"
 
     return data
 

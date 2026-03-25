@@ -8,6 +8,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # Use the Async client
 client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
+
 # Add 'async' here
 async def get_embedding(text):
     res = await client.embeddings.create(

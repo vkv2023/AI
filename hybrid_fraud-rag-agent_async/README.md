@@ -185,12 +185,15 @@ Docs → Kafka → Processor → Embeddings → Weaviate
 
 [//]: # (Create Kafka Topic )
 
-kafka-topics --create \
-  --topic fraud-events \
-  --bootstrap-server localhost:9092 \
-  --partitions 1 \
-  --replication-factor 1
+[//]: # (kafka-topics --create \)
+[//]: # (  --topic fraud-events \)
+[//]: # (  --bootstrap-server localhost:9092 \)
+[//]: # (  --partitions 1 \)
+[//]: # (  --replication-factor 1)
 
+execute this at home dir path 
+==============================
+python -m src.ingestion.kafka_consumer 
 ===========================
 Run the ingestion script 
 ===========================
@@ -219,17 +222,48 @@ Terminal 2 (The Tester): python test_api.py
 
 =====================================================================================
 Output
-1- goes through API GW and store the reults in Redis
+1- goes through API GW and store the results in Redis
 2- it goes and check in RAG vector DB, with no results. 
 =======================================================================================
-PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests> python test_api.py
+(venv) PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests> python test_api.py
 Sending Query: Check for suspicious patterns in transaction TXN_9988
 Success!
 Response: {
-  "source": "API",
-  "response": "Transaction Info: Transaction flagged: unusual location + high amount"
+  "response": {
+    "source": "cache",
+    "response": "Transaction Info: Transaction flagged: unusual location or high amount"
+  }
 }
-Sending Query: What is the fraud risk level for user 'Vinod'?   
-Failed with status code: 500
-Internal Server Error
-PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests>
+Sending Query: What is the fraud risk level for user 'Vinod'?
+Success!
+Response: {
+  "response": {
+    "source": "cache",
+    "response": "I do not know."
+  }
+}
+Sending Query: Monthly subscription
+Success!
+Response: {
+  "response": {
+    "source": "cache",
+    "response": "I do not know."
+  }
+}
+(venv) PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests>
+
+
+With async and await, 
+=====================
+FastAPI server can "pause" a request the moment it hits a database call. 
+While Weaviate is searching, the CPU is free to start processing the next fraud check. 
+You can now handle thousands of concurrent requests on the same hardware.
+
+async def: This tells Python that this function is a Coroutine. Calling it doesn't run the code immediately; 
+it returns a "promise" that the code will run.
+
+await: This is the "Yield" point. It tells the Python Event Loop: "I am waiting for this external task (like a Weaviate search) to finish. 
+You are free to go do other work now. Wake me up when the data arrives."
+
+Also, can implement asyncio.gather() to run 
+Weaviate search and  Redis check at the exact same time to cut your latency in half

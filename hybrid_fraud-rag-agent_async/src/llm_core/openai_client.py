@@ -15,8 +15,8 @@ client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 async def call_llm_with_context(query, context_documents):
     # FORCE PRINT: If you don't see this, the function isn't even being called!
-    print(f"\n🚀 LLM Function Triggered for Query: {query}")
-    print(f"📦 Number of docs received from Weaviate: {len(context_documents)}")
+    print(f"\nLLM Function Triggered for Query: {query}")
+    print(f"Number of docs received from Weaviate: {len(context_documents)}")
 
     if not context_documents:
         return "I'm sorry, I don't have any records in my database to answer that."
@@ -56,5 +56,5 @@ async def call_llm_with_context(query, context_documents):
         return response.choices[0].message.content
 
     except Exception as e:
-        print(f"❌ OpenAI Error: {e}")
+        print(f"OpenAI Error: {e}")
         return "Error calling the AI model."
