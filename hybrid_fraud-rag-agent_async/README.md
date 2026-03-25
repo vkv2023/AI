@@ -194,7 +194,7 @@ kafka-topics --create \
 ===========================
 Run the ingestion script 
 ===========================
-PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async> python -m src.ingestion.ingest_data
+    PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async> python -m src.ingestion.ingest_data
 http://localhost:8080
 Schema already exists
 Ingesting 7 records...
@@ -204,7 +204,11 @@ PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async>
 ==================================
 to test your orchestrator service 
 ==================================
+set the path before starting the uvicorn server
 Terminal 1 (The Server): uvicorn src.app:app --reload
+        $env:PYTHONPATH=".\src" 
+                or 
+        $env:PYTHONPATH="C:\Vinod\Code\python\AI\hybrid_fraud-rag-agent_async\src"
 Terminal 2 (The Tester): python test_api.py
 
     FastAPI (app.py): Receives the JSON request.

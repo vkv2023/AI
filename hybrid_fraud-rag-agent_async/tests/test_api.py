@@ -25,3 +25,4 @@ if __name__ == "__main__":
     # Test cases for your Fraud RAG
     test_fraud_query("Check for suspicious patterns in transaction TXN_9988")
     test_fraud_query("What is the fraud risk level for user 'Vinod'?")
+    test_fraud_query("Monthly subscription")

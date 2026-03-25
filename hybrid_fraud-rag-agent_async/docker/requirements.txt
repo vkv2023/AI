@@ -2,7 +2,7 @@ fastapi
 uvicorn
 openai
 redis
-weaviate-client>=3.26.7,<4.0.0
+weaviate-client>=3.26.7,<=4.20.4
 confluent-kafka
 pytest
 tenacity

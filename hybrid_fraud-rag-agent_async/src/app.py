@@ -13,6 +13,8 @@ logger.info("Processing request")
 app = FastAPI()
 
 
+# Use await here because handle_query is now async
 @app.post("/query")
-def query(payload: dict):
-    return handle_query(payload["query"])
+async def query(payload: dict):
+    result = await handle_query(payload["query"])
+    return {"response": result}

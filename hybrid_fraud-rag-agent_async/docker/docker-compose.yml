@@ -1,18 +1,21 @@
 services:
-
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
 
   weaviate:
-    image: semitechnologies/weaviate:1.24.10
+    # 1. Upgrade to 1.27.0+ for Python v4 Client compatibility
+    image: cr.weaviate.io/semitechnologies/weaviate:1.27.0
     ports:
       - "8080:8080"
+      - "50051:50051" # 2. CRITICAL: Open gRPC port for v4 search performance
     environment:
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
       DEFAULT_VECTORIZER_MODULE: 'none'
+      # 3. Enable gRPC explicitly (sometimes required depending on the image build)
+      ENABLE_GRPC: 'true'
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
