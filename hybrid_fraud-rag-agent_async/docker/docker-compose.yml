@@ -3,6 +3,8 @@ services:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+#    volumes:
+#      - redis_data:/data   # persist Redis (optional but recommended)
 
   weaviate:
     # 1. Upgrade to 1.27.0+ for Python v4 Client compatibility
@@ -11,31 +13,53 @@ services:
       - "8080:8080"
       - "50051:50051" # 2. CRITICAL: Open gRPC port for v4 search performance
     environment:
+      CLUSTER_HOSTNAME: 'node1'
+      RAFT_BOOTSTRAP_EXPECT: 1
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
       DEFAULT_VECTORIZER_MODULE: 'none'
       # 3. Enable gRPC explicitly (sometimes required depending on the image build)
       ENABLE_GRPC: 'true'
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "weaviate", "8080" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+#    volumes:
+#      - weaviate_data:/var/lib/weaviate   # persistent vector DB
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
+    depends_on:
+      weaviate:
+        condition: service_healthy
     ports:
       - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "2181" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy   # THIS is key
     ports:
       - "9092:9092"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      # Allow connections from 'localhost' (external) AND 'kafka' (internal)
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:29092,LISTENER_DOCKER_EXTERNAL://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      # --- ADD THIS LINE ---
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+
+#volumes:
+#  weaviate_data:
+#  redis_data:

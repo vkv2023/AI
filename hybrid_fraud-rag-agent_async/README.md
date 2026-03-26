@@ -198,17 +198,26 @@ python -m src.ingestion.kafka_consumer
 Run the ingestion script 
 ===========================
     PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async> python -m src.ingestion.ingest_data
+
 http://localhost:8080
 Schema already exists
 Ingesting 7 records...
 Ingestion complete
 PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async>
 
+verify the data in weaviate 
+===============================
+    PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async>python -m src.ingestion.verify_data
+
+Delete the data in weaviate 
+===============================
+    PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async>python -m src.ingestion.delete_records
+
 ==================================
 to test your orchestrator service 
 ==================================
-set the path before starting the uvicorn server
-Terminal 1 (The Server): uvicorn src.app:app --reload
+    set the path before starting the uvicorn server
+    Terminal 1 (The Server): uvicorn src.app:app --reload
         $env:PYTHONPATH=".\src" 
                 or 
         $env:PYTHONPATH="C:\Vinod\Code\python\AI\hybrid_fraud-rag-agent_async\src"
@@ -225,7 +234,7 @@ Output
 1- goes through API GW and store the results in Redis
 2- it goes and check in RAG vector DB, with no results. 
 =======================================================================================
-(venv) PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests> python test_api.py
+    (venv) PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async\tests> python test_api.py
 Sending Query: Check for suspicious patterns in transaction TXN_9988
 Success!
 Response: {

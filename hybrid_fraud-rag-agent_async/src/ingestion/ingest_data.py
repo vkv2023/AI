@@ -14,8 +14,6 @@ CLASS_NAME = "FraudEvent"
 
 async def create_schema():
     """Wipes and recreates the collection using v4 standards."""
-    if not client.is_connected():
-        await client.connect()
 
     # 1. Cleanup: delete existing collection to ensure a fresh schema
     if await client.collections.exists(CLASS_NAME):
@@ -30,7 +28,8 @@ async def create_schema():
         vectorizer_config=Configure.Vectorizer.none(),
         properties=[
             Property(name="content", data_type=DataType.TEXT),
-            Property(name="metadata", data_type=DataType.TEXT),
+            Property(name="label", data_type=DataType.TEXT),
+            Property(name="risk_score", data_type=DataType.NUMBER),
         ]
     )
     print("Schema created successfully.")
@@ -60,8 +59,9 @@ async def ingest_data(file_path="data/fraud_cases.json"):
         objects_to_insert.append(
             DataObject(
                 properties={
-                    "content": content,
-                    "metadata": str(time.time())
+                    "content": item.get("content"),
+                    "label": item.get("label"),
+                    "risk_score": item.get("risk_score", 0.5)
                 },
                 vector=vector
             )
@@ -81,8 +81,23 @@ async def ingest_data(file_path="data/fraud_cases.json"):
 
 async def main():
     try:
-        if not client.is_connected():
-            await client.connect()
+        print("Connecting to Weaviate...")
+        await client.connect()
+
+        # --- ADD THIS WAIT LOOP ---
+        print("Waiting for Weaviate leader election and readiness...")
+        is_ready = False
+        for i in range(60):  # Try for 20 seconds
+            if await client.is_ready():
+                is_ready = True
+                print("Weaviate is ready and leader is elected!")
+                break
+            print(f"Still waiting for leader... ({i + 1}/20)")
+            await asyncio.sleep(1)
+
+        if not is_ready:
+            raise Exception("Weaviate timed out before becoming ready.")
+        # ---------------------------
 
         await create_schema()
         await ingest_data()

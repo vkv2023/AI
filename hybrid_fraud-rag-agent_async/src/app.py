@@ -1,13 +1,18 @@
 import os
 import sys
 import logging
+import redis.asyncio as redis
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from src.orchestrator.agent import handle_query
+import src.configurations as conf
 
 # Ensure the root directory is in the path so 'src' is discoverable
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.orchestrator.agent import handle_query
+# Rate limit settings: 5 requests per 60 seconds per IP
+RATE_LIMIT_DURATION = 60
+RATE_LIMIT_REQUESTS = 5
 
 # Configure Logging
 logging.basicConfig(
@@ -17,20 +22,66 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+'''
+Request Arrives: FastAPI identifies the user by their IP address.
+    Redis Lookup: It checks a key like rate_limit:xxx.xxx.xxx.xxx
+    If the value is < 5, it allows the request and increments the counter.
+    If the value is >= 5, it immediately returns a 429 Too Many Requests status, saving your LLM and Weaviate from doing any work.
+    Auto-Reset: After 60 seconds, Redis automatically deletes the key (expire), and the user can send queries again.
+'''
+
 # 1. Lifespan Manager: Cleanly start and stop connections
+# 1. Define the lifespan FIRST
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Starting Hybrid Fraud-RAG API...")
-    # You can initialize shared clients here (Redis, Kafka Producer, etc.)
-    yield
-    logger.info("Shutting down API and closing connections...")
+    # Startup logic
+    try:
+        # app.state.redis = redis.Redis(host=conf.REDIS_HOST, port=conf.REDIS_PORT, db=0, decode_responses=True)
+        # Test the connection immediately
+        # await app.state.redis.ping()
+        print("Redis is connected and state.redis is set")
+    except Exception as e:
+        print(f"Redis connection failed: {e}")
+        # If this fails, the app might start but state.redis will be missing!
 
+    yield  # The app stays in this 'yield' state while running
+
+    # Shutdown logic
+    # await app.state.redis.close()
 
 app = FastAPI(lifespan=lifespan)
 
 
 @app.post("/query")
-async def query(payload: dict):
+async def query(request: Request, payload: dict):
+    # 1. Get User IP (or a unique API key)
+    # user_ip = request.client.host
+    # redis_key = f"rate_limit:{user_ip}"
+
+    # print(redis_key)
+
+    # Do NOT use the global 'app' variable here
+    # if not hasattr(request.app.state, "docker-redis-1"):
+    #     return {"error": "Redis connection not initialized"}
+
+    # 2. Use 'request.app.state' instead of 'app.state'
+    # This ensures you are looking at the state of the RUNNING app
+    # redis_conn = request.app.state.docker-redis-1
+
+    # current_count = await redis_conn.get(redis_key)
+
+    # if current_count and int(current_count) >= RATE_LIMIT_REQUESTS:
+    #     raise HTTPException(
+    #         status_code=429,
+    #         detail="Too many requests. Please wait a minute."
+    #     )
+
+    # 3. Increment the count and set expiration if it's a new key
+    # async with app.state.redis.pipeline(transaction=True) as pipe:
+    #     await pipe.incr(redis_key)
+    #     await pipe.expire(redis_key, RATE_LIMIT_DURATION)
+    #     await pipe.execute()
+
     # Basic validation to prevent KeyErrors
     user_query = payload.get("query")
     if not user_query:

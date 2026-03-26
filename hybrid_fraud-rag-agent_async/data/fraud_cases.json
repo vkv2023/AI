@@ -1,31 +1,37 @@
 [
   {
-    "content": "Fraud detected when transaction location differs significantly from user history.",
-    "label": "fraud"
+    "content": "Transaction from a location far from user's usual city within short time",
+    "label": "fraud",
+    "risk_score": 0.9
   },
   {
-    "content": "Multiple rapid transactions can indicate fraud.",
-    "label": "fraud"
-
+    "content": "Multiple transactions within 60 seconds",
+    "label": "fraud",
+    "risk_score": 0.85
   },
   {
     "content": "High value purchase from new device in foreign country",
-    "label": "fraud"
+    "label": "fraud",
+    "risk_score": 0.95
   },
   {
-    "content": "Multiple rapid transactions within 1 minute",
-    "label": "fraud"
+    "content": "Online purchase from unusual geographic location",
+    "label": "fraud",
+    "risk_score": 0.8
   },
   {
-    "content": "Online purchase from unusual location",
-    "label": "fraud"
+    "content": "Transaction from IP address previously marked suspicious",
+    "label": "fraud",
+    "risk_score": 0.88
   },
   {
-    "content": "Normal grocery purchase from usual location",
-    "label": "legit"
+    "content": "Normal grocery purchase from user's usual location",
+    "label": "legit",
+    "risk_score": 0.1
   },
   {
-    "content": "flagged: Monthly subscription initiated from a blocked IP range",
-    "label": "legit"
+    "content": "Recurring subscription payment from known merchant",
+    "label": "legit",
+    "risk_score": 0.05
   }
 ]

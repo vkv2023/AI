@@ -1,22 +1,15 @@
 import os
 import weaviate
-from weaviate.classes.init import Auth
 from dotenv import load_dotenv
 from src.fraud_rag.embeddings import get_embedding
+import src.configurations as conf
 
-load_dotenv()
-
-# ---------- CONFIG ----------
-HOST = os.getenv("WEAVIATE_HOST", "localhost")
-PORT = int(os.getenv("WEAVIATE_PORT", 8080))
-GRPC_PORT = int(os.getenv("WEAVIATE_GRPC_PORT", 50051))
-WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")  # needed for v4 as it uses GRPC, not needed for docker
+# WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")  # needed for v4 as it uses GRPC, not needed for docker
 # For v4, we use use_async_with_local or connect_to_weaviate_cloud
-# This example assumes a standard URL connection
 client = weaviate.use_async_with_local(
-    host=HOST,
-    port=PORT,
-    grpc_port=GRPC_PORT
+    host=conf.WEAVIATE_HOST,
+    port=conf.WEAVIATE_PORT,
+    grpc_port=conf.WEAVIATE_GRPC_PORT
     # ,
     # auth_credentials=Auth.api_key(os.getenv("WEAVIATE_API_KEY")), # Optional: if using WCS
 )

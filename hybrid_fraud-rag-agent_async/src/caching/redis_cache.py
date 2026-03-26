@@ -1,14 +1,12 @@
 import os
 import redis.asyncio as redis  # Use the asyncio-compatible client , interface
+import src.configurations as conf
 import hashlib
 
-# Get environment variables with fallbacks
-REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 
 # Initialize the Async client
 # decode_responses=True ensures you get strings back instead of bytes
-r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+r = redis.Redis(host=conf.REDIS_HOST, port=conf.REDIS_PORT, decode_responses=True)
 
 
 def key(q):
