@@ -4,11 +4,11 @@ import sys
 import os
 
 # Adjust the path to allow importing modules from src
-# Assuming the test file is in 'hybrid_fraud-rag-agent_async/tests/'
-# and the module to be tested is in 'hybrid_fraud-rag-agent_async/src/fraud_rag/weaviate_client.py'
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 # Now import the function to be tested
+from fraud_rag.weaviate_client import search_docs
+    @patch('fraud_rag.weaviate_client.client')
+    @patch('fraud_rag.weaviate_client.get_embedding', new_callable=AsyncMock)
+
 from src.fraud_rag.weaviate_client import search_docs
 
 class TestWeaviateClient(unittest.IsolatedAsyncioTestCase):
@@ -46,8 +46,8 @@ class TestWeaviateClient(unittest.IsolatedAsyncioTestCase):
             alpha=0.3,
             return_properties=["content"]
         )
-        self.assertEqual(len(result), 2)
-        self.assertEqual(result[0].properties["content"], "Fraud event details 1")
+    @patch('fraud_rag.weaviate_client.client')
+    @patch('fraud_rag.weaviate_client.get_embedding', new_callable=AsyncMock)
         self.assertEqual(result[1].properties["content"], "Fraud event details 2")
 
     @patch('src.fraud_rag.weaviate_client.client')
@@ -72,9 +72,8 @@ class TestWeaviateClient(unittest.IsolatedAsyncioTestCase):
         mock_get_embedding.assert_called_once_with(query_text)
         mock_weaviate_client.collections.get.assert_called_once_with("FraudEvent")
         mock_collection.query.hybrid.assert_called_once_with(
-            query=query_text,
-            vector=mock_embedding_vector,
-            limit=5,
+    @patch('fraud_rag.weaviate_client.client')
+    @patch('fraud_rag.weaviate_client.get_embedding', new_callable=AsyncMock)
             alpha=0.3,
             return_properties=["content"]
         )
@@ -102,8 +101,8 @@ class TestWeaviateClient(unittest.IsolatedAsyncioTestCase):
 
         result = await search_docs(query_text)
 
-        mock_weaviate_client.is_connected.assert_called_once()
-        mock_weaviate_client.connect.assert_called_once()
+    @patch('fraud_rag.weaviate_client.client')
+    @patch('fraud_rag.weaviate_client.get_embedding', new_callable=AsyncMock)
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].properties["content"], "Connected fraud event")
 
@@ -115,7 +114,8 @@ class TestWeaviateClient(unittest.IsolatedAsyncioTestCase):
 
         mock_weaviate_client.is_connected.return_value = True
         # Mock collections.get even if it won't be called, to avoid AttributeError if the mock is accessed
-        mock_weaviate_client.collections.get.return_value = MagicMock()
+    @patch('fraud_rag.weaviate_client.client')
+    @patch('fraud_rag.weaviate_client.get_embedding', new_callable=AsyncMock)
 
         result = await search_docs(query_text)
 

@@ -6,6 +6,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from src.orchestrator.agent import handle_query
 import src.configurations as conf
+from prometheus_client import Counter, Histogram, generate_latest
+from starlette.responses import PlainTextResponse
 
 # Ensure the root directory is in the path so 'src' is discoverable
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -21,6 +23,27 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Prometheus Metrics
+REQUEST_COUNT = Counter(
+    'app_request_count',
+    'Total number of requests to the application',
+    ['endpoint']
+)
+REQUEST_SUCCESS_COUNT = Counter(
+    'app_request_success_count',
+    'Number of successful requests to the application',
+    ['endpoint']
+)
+REQUEST_ERROR_COUNT = Counter(
+    'app_request_error_count',
+    'Number of erroneous requests to the application',
+    ['endpoint']
+)
+REQUEST_LATENCY = Histogram(
+    'app_request_latency_seconds',
+    'Latency of requests to the application',
+    ['endpoint']
+)
 
 '''
 Request Arrives: FastAPI identifies the user by their IP address.
@@ -54,6 +77,9 @@ app = FastAPI(lifespan=lifespan)
 
 @app.post("/query")
 async def query(request: Request, payload: dict):
+    # Increment total request counter for Prometheus
+    REQUEST_COUNT.labels(endpoint="/query").inc()
+
     # 1. Get User IP (or a unique API key)
     # user_ip = request.client.host
     # redis_key = f"rate_limit:{user_ip}"
@@ -91,15 +117,51 @@ async def query(request: Request, payload: dict):
     try:
         logger.info(f"Processing query: {user_query[:50]}...")
         # handle_query will now use your RAG + Kafka logic
-        result = await handle_query(user_query)
+        with REQUEST_LATENCY.labels(endpoint="/query").time():
+            result = await handle_query(user_query)
+        REQUEST_SUCCESS_COUNT.labels(endpoint="/query").inc()
         return {"response": result}
 
     except Exception as e:
         logger.error(f"Error in orchestrator: {str(e)}")
+        REQUEST_ERROR_COUNT.labels(endpoint="/query").inc()
         raise HTTPException(status_code=500, detail="Internal processing error")
+
+
+# Debugging endpoints
+@app.post("/debug/search")
+async def debug_search(payload: dict):
+    """Run the same Weaviate search used by RAG and return the raw document properties for debugging."""
+    query = payload.get("query")
+    if not query:
+        raise HTTPException(status_code=400, detail="Missing 'query' in payload")
+
+    # Import inside the function to avoid circular imports
+    from src.fraud_rag.weaviate_client import search_docs
+
+    docs = await search_docs(query)
+    # Convert objects to plain dicts
+    docs_props = [getattr(d, "properties", {}) for d in docs]
+    return {"count": len(docs_props), "docs": docs_props}
+
+
+@app.post("/debug/ingest")
+async def debug_ingest():
+    """Trigger ingestion of the local fraud_cases.json into Weaviate (for debugging)."""
+    # Import inside to avoid startup cycles
+    from src.ingestion.ingest_data import ingest_data
+
+    # Run ingestion and return a simple response
+    await ingest_data()
+    return {"status": "ingestion_triggered"}
 
 
 # Health check for Docker/Monitoring
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
+
+
+@app.get("/metrics")
+async def metrics():
+    return PlainTextResponse(generate_latest().decode('utf-8'))

@@ -195,6 +195,10 @@ execute this at home dir path
 ==============================
 python -m src.ingestion.kafka_consumer 
 ===========================
+Activate the venv
+================================
+PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async>.\venv\Scripts\activate
+
 Run the ingestion script 
 ===========================
     PS C:\Vinod\code\python\AI\hybrid_fraud-rag-agent_async> python -m src.ingestion.ingest_data
@@ -276,3 +280,13 @@ You are free to go do other work now. Wake me up when the data arrives."
 
 Also, can implement asyncio.gather() to run 
 Weaviate search and  Redis check at the exact same time to cut your latency in half
+
+===============================
+promethus counter for API calls
+
+http://localhost:9090/targets
+================================
+app_request_count
+app_request_success_count
+app_request_error_count
+app_request_latency_seconds

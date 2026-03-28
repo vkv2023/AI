@@ -7,3 +7,5 @@ confluent-kafka
 pytest
 tenacity
 dotenv
+prometheus_client
+aiokafka

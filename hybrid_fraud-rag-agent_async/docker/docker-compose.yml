@@ -60,6 +60,35 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
 
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - kafka
+#      - localhost
+      - fraud-rag-api # Add dependency on the new FastAPI service
+
+  fraud-rag-api: # New service for the FastAPI application
+#  localhost:
+    build:
+      context: .. # Change build context to the parent directory
+      dockerfile: docker/Dockerfile # Specify the path to the Dockerfile within the new context
+    ports:
+      - "8000:8000"
+    depends_on:
+      - weaviate
+      - redis
+    environment:
+      # Add any necessary environment variables for your FastAPI app here
+      # For example, if your app needs to know the Weaviate host:
+      WEAVIATE_HOST: weaviate
+      REDIS_HOST: redis
+
 #volumes:
 #  weaviate_data:
 #  redis_data:

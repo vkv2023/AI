@@ -11,7 +11,6 @@ client = weaviate.use_async_with_local(
     port=conf.WEAVIATE_PORT,
     grpc_port=conf.WEAVIATE_GRPC_PORT
     # ,
-    # auth_credentials=Auth.api_key(os.getenv("WEAVIATE_API_KEY")), # Optional: if using WCS
 )
 
 
@@ -52,3 +51,20 @@ async def search_docs(query_text):
     except Exception as e:
         print(f"Weaviate Search Error: {e}")
         return []  # Return empty list on error to maintain data type consistency
+
+
+async def store_fraud_event(event_data: dict):
+    try:
+        if not client.is_connected():
+            await client.connect()
+
+        fraud_events = client.collections.get("FraudEvent")
+        response = await fraud_events.data.insert(
+            properties=event_data
+        )
+        print(f"Fraud event stored in Weaviate with ID: {response.uuid}")
+        return response.uuid
+    except Exception as e:
+        print(f"Error storing fraud event in Weaviate: {e}")
+        return None
+
