@@ -34,7 +34,7 @@ async def search_docs(query_text):
             query=query_text,  # Keyword search
             vector=query_vector,  # Vector search
             limit=5,  # Increase limit slightly
-            alpha=0.3,  # 0.5 balances keywords and vector meaning
+            alpha=0.3,  # 0.5 balances keywords and vector meaning, removes hallucination
             # ADD THIS LINE:
             return_properties=["content"]
         )

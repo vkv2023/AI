@@ -128,39 +128,10 @@ async def query(request: Request, payload: dict):
         raise HTTPException(status_code=500, detail="Internal processing error")
 
 
-# Debugging endpoints
-@app.post("/debug/search")
-async def debug_search(payload: dict):
-    """Run the same Weaviate search used by RAG and return the raw document properties for debugging."""
-    query = payload.get("query")
-    if not query:
-        raise HTTPException(status_code=400, detail="Missing 'query' in payload")
-
-    # Import inside the function to avoid circular imports
-    from src.fraud_rag.weaviate_client import search_docs
-
-    docs = await search_docs(query)
-    # Convert objects to plain dicts
-    docs_props = [getattr(d, "properties", {}) for d in docs]
-    return {"count": len(docs_props), "docs": docs_props}
-
-
-@app.post("/debug/ingest")
-async def debug_ingest():
-    """Trigger ingestion of the local fraud_cases.json into Weaviate (for debugging)."""
-    # Import inside to avoid startup cycles
-    from src.ingestion.ingest_data import ingest_data
-
-    # Run ingestion and return a simple response
-    await ingest_data()
-    return {"status": "ingestion_triggered"}
-
-
 # Health check for Docker/Monitoring
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
-
 
 @app.get("/metrics")
 async def metrics():

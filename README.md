@@ -1,7 +1,7 @@
 This Directory contains all the work related to RAG, LLM, AI Agents, Generative AI and Agentic AI.
 ======================================================================================================================================
 RAG (Retrieval-Augmented Generation)
-================================================================================================
+=========================================================================================================
 
 	Installing Weaviate (Open-Source Vector Database)
 	Create docker-compose.yml
