@@ -19,3 +19,6 @@ To deploy your application on Vercel, you can follow these steps:
 16. https://www.youtube.com/watch?v=eSbeub2ZeNk
 ====================================================
 in this video, we will show you how to deploy your AI agent on Vercel. Vercel is a popular platform for hosting and deploying web applications, and it provides an easy-to-use interface for developers. We will walk you through the steps of setting up your project, configuring your deployment settings, and finally deploying your AI agent to the web. By the end of this video, you will have a live version of your AI agent that can be accessed from anywhere. So let's get started!
+
+
+https://deploy-aia-gent-tau.vercel.app/

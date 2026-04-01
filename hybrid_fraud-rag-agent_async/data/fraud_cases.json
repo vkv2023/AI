@@ -33,5 +33,181 @@
     "content": "Recurring subscription payment from known merchant",
     "label": "legit",
     "risk_score": 0.05
-  }
+  },
+  {
+    "content": "Sequential micro-transactions at gas stations across three different states within 2 hours",
+    "label": "fraud",
+    "risk_score": 0.92
+  },
+  {
+    "content": "Utility bill payment for an address not associated with the cardholder's profile",
+    "label": "fraud",
+    "risk_score": 0.75
+  },
+  {
+    "content": "Attempted luxury watch purchase followed by immediate password reset request",
+    "label": "fraud",
+    "risk_score": 0.98
+  },
+  {
+    "content": "Small 'test' transaction ($1.00) followed by a $2,500 electronics purchase",
+    "label": "fraud",
+    "risk_score": 0.94
+  },
+  {
+    "content": "Login from an emulated device using a proxy server known for data center traffic",
+    "label": "fraud",
+    "risk_score": 0.89
+  },
+  {
+    "content": "In-app purchase for digital currency in a game never previously played by user",
+    "label": "fraud",
+    "risk_score": 0.72
+  },
+  {
+    "content": "Flight booking for a one-way international trip departing within 24 hours",
+    "label": "fraud",
+    "risk_score": 0.81
+  },
+  {
+    "content": "Coffee shop purchase in the user's home zip code",
+    "label": "legit",
+    "risk_score": 0.08
+  },
+  {
+    "content": "Monthly gym membership auto-renewal",
+    "label": "legit",
+    "risk_score": 0.02
+  },
+  {
+    "content": "E-commerce purchase using a saved 'Verified by Visa' device and domestic IP",
+    "label": "legit",
+    "risk_score": 0.15
+  },
+  {
+    "content": "Pay-at-the-pump transaction at a station the user visits weekly",
+    "label": "legit",
+    "risk_score": 0.05
+  },
+  {
+    "content": "Large furniture purchase at a local physical store with chip-and-pin verification",
+    "label": "legit",
+    "risk_score": 0.12
+  },
+  {
+    "content": "ATM withdrawal in a neighboring city where user has a secondary residence",
+    "label": "legit",
+    "risk_score": 0.25
+  },
+  {
+    "content": "Multiple failed CVV attempts followed by a successful high-value transaction",
+    "label": "fraud",
+    "risk_score": 0.96
+  },
+  {
+    "content": "Charity donation to an overseas NGO from a user who typically only spends locally",
+    "label": "fraud",
+    "risk_score": 0.68
+  },
+  { "content": "Micro-deposits from an unknown routing number followed by an immediate full-balance ACH pull.", "label": "fraud", "risk_score": 0.95 },
+  { "content": "Account holder adds a new authorized user and requests an overnight card delivery to a PO Box.", "label": "fraud", "risk_score": 0.88 },
+  { "content": "Three consecutive ATM withdrawals of $500 at three different banks on the same street.", "label": "fraud", "risk_score": 0.82 },
+  { "content": "Monthly recurring payment for cloud storage on a known, aging credit card.", "label": "legit", "risk_score": 0.02 },
+  { "content": "Physical card swipe at a gas station pump using the magnetic stripe instead of the chip.", "label": "fraud", "risk_score": 0.74 },
+  { "content": "Purchase of $2,000 worth of prepaid Visa gift cards at a 24-hour pharmacy at 3:00 AM.", "label": "fraud", "risk_score": 0.91 },
+  { "content": "A wire transfer of $45,000 to an international title company with a verified escrow agreement.", "label": "legit", "risk_score": 0.15 },
+  { "content": "Online purchase on a site where the user clicked through from a known phishing URL list.", "label": "fraud", "risk_score": 0.96 },
+  { "content": "Mobile banking login from a device with an active remote desktop sharing application running.", "label": "fraud", "risk_score": 0.93 },
+  { "content": "User increases their own daily transfer limit and immediately attempts a maximum-value Zelle payment.", "label": "fraud", "risk_score": 0.87 },
+  { "content": "Payment for a flight on the airline's official app using FaceID biometric authentication.", "label": "legit", "risk_score": 0.05 },
+  { "content": "Card used at a merchant whose business category code (MCC) is frequently associated with money laundering.", "label": "fraud", "risk_score": 0.78 },
+  { "content": "Multiple small transactions of exactly $9.99 at various digital storefronts within 15 minutes.", "label": "fraud", "risk_score": 0.84 },
+  { "content": "User checks their balance 15 times in one day without making any transactions.", "label": "legit", "risk_score": 0.20 },
+  { "content": "High-value wire transfer initiated immediately after the user changed their registered cell phone number.", "label": "fraud", "risk_score": 0.94 },
+  { "content": "Card billed by a toll booth operator on a highway the user drives on every weekday.", "label": "legit", "risk_score": 0.01 },
+  { "content": "A sudden payment of $500 to a bail bondsman in a state the user has no ties to.", "label": "fraud", "risk_score": 0.81 },
+  { "content": "Online purchase where the billing address matches the file, but the shipping address is a freight forwarder.", "label": "fraud", "risk_score": 0.79 },
+  { "content": "Contactless payment at a local coffee shop with a mobile wallet that has been active for 2 years.", "label": "legit", "risk_score": 0.03 },
+  { "content": "User enters the wrong PIN twice at an ATM, then successfully enters it on the third try.", "label": "legit", "risk_score": 0.25 },
+  { "content": "A massive influx of 50 simultaneous small deposits from various peer-to-peer accounts (smurfing).", "label": "fraud", "risk_score": 0.92 },
+  { "content": "Payment for a recurring utility bill that is 15% higher than the previous month due to seasonal usage.", "label": "legit", "risk_score": 0.04 },
+  { "content": "Credit card used to purchase high-end computer components from a newly registered e-commerce domain.", "label": "fraud", "risk_score": 0.83 },
+  { "content": "ATM withdrawal in a tourist city during the exact dates the user booked a flight to that city.", "label": "legit", "risk_score": 0.08 },
+  { "content": "Card charged by a merchant in a foreign country where the user's phone GPS shows they are currently located.", "label": "legit", "risk_score": 0.07 },
+  { "content": "A transaction that overdraws the account by $5.00 for a user who has never been overdrawn before.", "label": "legit", "risk_score": 0.30 },
+  { "content": "Purchase at a luxury hotel in the user's home city, booked under a name not on the account.", "label": "fraud", "risk_score": 0.76 },
+  { "content": "An online order where the user typed their credit card number manually instead of using autofill.", "label": "legit", "risk_score": 0.12 },
+  { "content": "A transfer of $10,000 to a cryptocurrency exchange from an account that normally only pays for groceries.", "label": "fraud", "risk_score": 0.85 },
+  { "content": "Credit card used at a brick-and-mortar store with a fallback to magnetic stripe because the chip failed.", "label": "legit", "risk_score": 0.40 },
+  { "content": "Card used at a parking garage in a city 50 miles away where the user's workplace is located.", "label": "legit", "risk_score": 0.05 },
+  { "content": "Payment of $1,200 for a legal retainer fee via a secure, authenticated banking portal.", "label": "legit", "risk_score": 0.10 },
+  { "content": "User receives a large direct deposit from a verified government payroll system.", "label": "legit", "risk_score": 0.01 },
+  { "content": "Transaction at a high-risk online gambling site using a card with no prior history of such purchases.", "label": "fraud", "risk_score": 0.77 },
+  { "content": "Online purchase with a mismatched billing zip code but a matching CVV and expiration date.", "label": "fraud", "risk_score": 0.72 },
+  { "content": "A sudden change in spending behavior, moving from strictly local stores to strictly high-end digital goods.", "label": "fraud", "risk_score": 0.86 },
+  { "content": "Automated payment for a streaming service that the user has been subscribed to for over a year.", "label": "legit", "risk_score": 0.01 },
+  { "content": "User transfers money between their own checking and savings accounts within the same bank.", "label": "legit", "risk_score": 0.01 },
+  { "content": "A purchase of $5,000 in electronics made from a device that has never been seen on the account before.", "label": "fraud", "risk_score": 0.90 },
+  { "content": "User attempts to log in with the correct password but fails the security questions three times.", "label": "fraud", "risk_score": 0.80 },
+  { "content": "Credit card used at a local restaurant that the user visits at least once a month.", "label": "legit", "risk_score": 0.03 },
+  { "content": "A transaction of $0.01 at an unknown merchant, often used to test if a stolen card is active.", "label": "fraud", "risk_score": 0.97 },
+  { "content": "User makes a purchase at a duty-free shop at an international airport.", "label": "legit", "risk_score": 0.15 },
+  { "content": "A large purchase made at 2:00 AM from an IP address known to belong to a public VPN service.", "label": "fraud", "risk_score": 0.89 },
+  { "content": "A transfer of funds to a family member with the same last name and a shared history of transfers.", "label": "legit", "risk_score": 0.05 },
+  { "content": "A purchase made at a store that is currently reporting a massive data breach in the news.", "label": "fraud", "risk_score": 0.65 },
+  { "content": "User pays their credit card bill in full from their linked external checking account.", "label": "legit", "risk_score": 0.01 },
+  { "content": "A transaction for $1.00 at a parking meter in the user's home city.", "label": "legit", "risk_score": 0.02 },
+  { "content": "A sudden burst of 20 transactions for digital downloads within a 2-hour window.", "label": "fraud", "risk_score": 0.88 },
+  { "content": "User disputes a charge that they legitimately made, claiming it was fraudulent (friendly fraud).", "label": "fraud", "risk_score": 0.70 },
+  { "content": "Instant 'drain' of reward points for high-value Apple Store gift cards immediately after an email change.", "label": "fraud", "risk_score": 0.98 },
+  { "content": "Five failed login attempts followed by a successful one from a known Tor exit node.", "label": "fraud", "risk_score": 0.94 },
+  { "content": "Purchase of a $1.00 'Profile Verification' fee on a suspicious international dating site.", "label": "fraud", "risk_score": 0.87 },
+  { "content": "A $0.00 'Active Card' check from a merchant in a country where the user has never traveled.", "label": "fraud", "risk_score": 0.92 },
+  { "content": "Transaction at a local hardware store for $1,245.82 with a physical chip-and-PIN card.", "label": "legit", "risk_score": 0.05 },
+  { "content": "User adds a new external bank account and attempts an immediate $10,000 'Push' transfer.", "label": "fraud", "risk_score": 0.89 },
+  { "content": "Multiple Uber rides in London, UK, while the user’s primary card is being used for lunch in Ohio.", "label": "fraud", "risk_score": 0.99 },
+  { "content": "A 400% tip left on a $15.00 restaurant bill (potential money laundering or error).", "label": "fraud", "risk_score": 0.65 },
+  { "content": "Payment to a 'Credit Repair' service known for high chargeback rates.", "label": "fraud", "risk_score": 0.72 },
+  { "content": "Recurring $14.99 Netflix subscription charge from a California-based IP.", "label": "legit", "risk_score": 0.01 },
+  { "content": "Sudden 'Change of Address' to a commercial mail-forwarding facility in Delaware.", "label": "fraud", "risk_score": 0.81 },
+  { "content": "User pays for 15 separate digital 'loot boxes' in a mobile game within 30 minutes.", "label": "legit", "risk_score": 0.35 },
+  { "content": "A wire transfer to a known 'Crypto Mixer' service often used for obfuscation.", "label": "fraud", "risk_score": 0.96 },
+  { "content": "ATM balance inquiry followed by a 'Maximum Withdrawal' attempt in a high-crime zip code.", "label": "fraud", "risk_score": 0.88 },
+  { "content": "Payment for a 'Passport Renewal' fee on an official .gov website.", "label": "legit", "risk_score": 0.02 },
+  { "content": "Transaction at a vending machine in a hospital late at night.", "label": "legit", "risk_score": 0.08 },
+  { "content": "Sequential purchases at 10 different 'OnlyFans' accounts in under an hour.", "label": "fraud", "risk_score": 0.79 },
+  { "content": "High-value electronics purchase with 'Next Day Air' shipping to a vacant property address.", "label": "fraud", "risk_score": 0.95 },
+  { "content": "User calls customer service to notify them of upcoming travel to Japan.", "label": "legit", "risk_score": 0.01 },
+  { "content": "A $5,000 tax payment to the IRS via an authorized payment processor.", "label": "legit", "risk_score": 0.01 },
+  { "content": "New credit card application using a 'Deceased' person's Social Security Number.", "label": "fraud", "risk_score": 0.99 },
+  { "content": "A 'Refund' from a merchant that the user has no history of ever purchasing from.", "label": "fraud", "risk_score": 0.84 },
+  { "content": "Transaction at a retail store where the card was manually keyed in by the cashier.", "label": "fraud", "risk_score": 0.68 },
+  { "content": "User buys a $5.00 coffee in Paris, France, two hours after a purchase in New York (Impossible Travel).", "label": "fraud", "risk_score": 0.99 },
+  { "content": "Annual 'Amazon Prime' membership renewal charge.", "label": "legit", "risk_score": 0.01 },
+  { "content": "Purchase at a 'Gold and Bullion' dealer by a user with no previous investment history.", "label": "fraud", "risk_score": 0.82 },
+  { "content": "Transaction at a local 'DMV' or 'Registry of Motor Vehicles'.", "label": "legit", "risk_score": 0.03 },
+  { "content": "Multiple $500 transfers to a 'Neo-Bank' account with a recently created username.", "label": "fraud", "risk_score": 0.77 },
+  { "content": "A 'Charity' donation of $1,000 to a newly formed, unverified non-profit.", "label": "fraud", "risk_score": 0.70 },
+  { "content": "Small transaction at a 'Dollar Store' followed by a large transaction at 'Best Buy'.", "label": "fraud", "risk_score": 0.86 },
+  { "content": "Utility payment for a property that matches the user's secondary 'Shipping' address.", "label": "legit", "risk_score": 0.04 },
+  { "content": "Credit card used for 'In-Flight' Wi-Fi and snacks on a domestic airline.", "label": "legit", "risk_score": 0.02 },
+  { "content": "A $200 withdrawal from an ATM located inside a reputable casino.", "label": "legit", "risk_score": 0.45 },
+  { "content": "Card used at a 'Self-Service' car wash in the user's neighborhood.", "label": "legit", "risk_score": 0.03 },
+  { "content": "Attempted login from an iPhone 6 in a region where the user only uses an iPhone 15.", "label": "fraud", "risk_score": 0.75 },
+  { "content": "A 'Request for Money' on Venmo from a contact not in the user's social graph.", "label": "fraud", "risk_score": 0.62 },
+  { "content": "Purchase of a 'One-Way' train ticket at a station kiosk.", "label": "legit", "risk_score": 0.12 },
+  { "content": "Transaction for a 'Pre-Order' video game that was authorized 6 months ago.", "label": "legit", "risk_score": 0.05 },
+  { "content": "Account balance is cleared out via 'Bill Pay' to an individual's name instead of a company.", "label": "fraud", "risk_score": 0.91 },
+  { "content": "A 'Credit' for a returned item at a major retailer like Walmart or Target.", "label": "legit", "risk_score": 0.01 },
+  { "content": "User enters their billing address but with a slightly misspelled street name (fat-finger).", "label": "legit", "risk_score": 0.22 },
+  { "content": "A $0.50 charge from a 'Scraping' bot trying to validate thousands of cards at once.", "label": "fraud", "risk_score": 0.98 },
+  { "content": "Transaction at a 'Comic-Con' or 'Art Fair' using a mobile Square reader.", "label": "legit", "risk_score": 0.18 },
+  { "content": "Purchase of 'Dry Cleaning' services in the user's home zip code.", "label": "legit", "risk_score": 0.02 },
+  { "content": "High-value purchase of 'Industrial Equipment' from a residential credit card.", "label": "fraud", "risk_score": 0.76 },
+  { "content": "User 'Locks' their card via the app, and 5 minutes later, an attempted purchase is blocked.", "label": "fraud", "risk_score": 0.99 },
+  { "content": "Transaction for a 'Subscription Box' (e.g., HelloFresh) with a long-standing history.", "label": "legit", "risk_score": 0.01 },
+  { "content": "A wire transfer for 'Inheritance Taxes' requested via an urgent email (Scam).", "label": "fraud", "risk_score": 0.93 },
+  { "content": "User buys 'Travel Insurance' immediately after booking an international flight.", "label": "legit", "risk_score": 0.04 },
+  { "content": "A high-value purchase at a 'Apple' store where the user used a secondary 'ID' check.", "label": "legit", "risk_score": 0.10 }
 ]
+

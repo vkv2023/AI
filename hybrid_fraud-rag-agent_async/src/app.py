@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from src.orchestrator.agent import handle_query
 import src.configurations as conf
-from prometheus_client import Counter, Histogram, generate_latest
+from prometheus_client import Counter, Histogram, generate_latest, REGISTRY
 from starlette.responses import PlainTextResponse
 
 # Ensure the root directory is in the path so 'src' is discoverable
@@ -45,6 +45,13 @@ REQUEST_LATENCY = Histogram(
     ['endpoint']
 )
 
+# Force the metric to appear in /metrics immediately with a value of 0
+# Initialize the labels immediately after the valid definitions
+REQUEST_COUNT.labels(endpoint="/query")
+REQUEST_SUCCESS_COUNT.labels(endpoint="/query")
+REQUEST_ERROR_COUNT.labels(endpoint="/query")
+REQUEST_LATENCY.labels(endpoint="/query")
+
 '''
 Request Arrives: FastAPI identifies the user by their IP address.
     Redis Lookup: It checks a key like rate_limit:xxx.xxx.xxx.xxx
@@ -52,6 +59,7 @@ Request Arrives: FastAPI identifies the user by their IP address.
     If the value is >= 5, it immediately returns a 429 Too Many Requests status, saving your LLM and Weaviate from doing any work.
     Auto-Reset: After 60 seconds, Redis automatically deletes the key (expire), and the user can send queries again.
 '''
+
 
 # 1. Lifespan Manager: Cleanly start and stop connections
 # 1. Define the lifespan FIRST
@@ -71,6 +79,7 @@ async def lifespan(app: FastAPI):
 
     # Shutdown logic
     # await app.state.redis.close()
+
 
 app = FastAPI(lifespan=lifespan)
 
@@ -133,6 +142,10 @@ async def query(request: Request, payload: dict):
 async def health():
     return {"status": "healthy"}
 
+
+# Monitoring check for Docker/Monitoring
 @app.get("/metrics")
 async def metrics():
-    return PlainTextResponse(generate_latest().decode('utf-8'))
+    # REGISTRY ensures your manual counters are included in the export
+    return PlainTextResponse(generate_latest(REGISTRY).decode('utf-8'))
+

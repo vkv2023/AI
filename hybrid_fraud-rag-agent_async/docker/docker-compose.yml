@@ -73,17 +73,17 @@ services:
 #      - localhost
       - fraud-rag-api # Add dependency on the new FastAPI service
 
-  fraud-rag-api: # New service for the FastAPI application
-#  localhost:
+  fraud-rag-api:
     build:
-      context: .. # Change build context to the parent directory
-      dockerfile: docker/Dockerfile # Specify the path to the Dockerfile within the new context
+      context: ..
+      dockerfile: docker/Dockerfile
     ports:
       - "8000:8000"
-    depends_on:
-      - weaviate
-      - redis
+    # This sends the file contents directly INTO the container
+    env_file:
+      - ../.env
     environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY} # This pulls from your local .env file
       # Add any necessary environment variables for your FastAPI app here
       # For example, if your app needs to know the Weaviate host:
       WEAVIATE_HOST: weaviate
