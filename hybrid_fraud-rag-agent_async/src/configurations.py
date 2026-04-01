@@ -36,6 +36,7 @@ WEAVIATE_HOST = os.getenv("WEAVIATE_HOST")
 WEAVIATE_PORT = _int_env("WEAVIATE_PORT", 8080)
 WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")
 WEAVIATE_GRPC_PORT = _int_env("WEAVIATE_GRPC_PORT", 50051)
+KAFKA_URL = os.getenv("KAFKA_URL", "localhost:9092")
 
 
 # Warn if OpenAI is disabled so it's obvious in the logs

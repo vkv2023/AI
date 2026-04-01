@@ -1,53 +1,63 @@
+import os
 import asyncio
 import json
 from confluent_kafka import Consumer
-from src.fraud_rag.weaviate_client import search_docs  # Your async function
+from src.fraud_rag.weaviate_client import search_docs
+import src.configurations as conf
 
-c = Consumer({
-    'bootstrap.servers': 'localhost:9092',
+# Configuration from Environment
+KAFKA_URL = os.getenv("KAFKA_URL", "localhost:9092")
+# KAFKA_URL = (conf.KAFKA_URL, "localhost:9092")  # Override with configuration value if set
+
+conf = {
+    'bootstrap.servers': KAFKA_URL,
     'group.id': 'fraud-group',
-    'auto.offset.reset': 'earliest'
-})
+    'auto.offset.reset': 'earliest',
+    'enable.auto.commit': True
+}
 
+c = Consumer(conf)
 c.subscribe(['fraud'])
 
 
-# src/ingestion/kafka_consumer.py
-
 async def main_loop():
+    print(f"Starting consumer on {KAFKA_URL}...")
     try:
         while True:
+            # Poll for 1 second
             msg = c.poll(1.0)
+
             if msg is None:
                 continue
             if msg.error():
                 print(f"Consumer error: {msg.error()}")
                 continue
 
-            # --- THE FIX: Check if value is empty ---
             val = msg.value()
             if not val:
-                print("Received an empty message, skipping...")
                 continue
 
             try:
-                # Now it's safe to decode
                 data = json.loads(val.decode('utf-8'))
-                print(f"Processing: {data}")
+                print(f"Processing transaction: {data.get('event', 'unknown')}")
 
-                # Check if the expected key exists
+                # Trigger RAG search in Weaviate
                 if 'event' in data:
                     results = await search_docs(data['event'])
-                    print(f"RAG Results found.")
-                else:
-                    print("JSON received but 'event' key is missing.")
+                    print(f"RAG matching complete. Found {len(results)} similar cases.")
 
-            except json.JSONDecodeError as e:
-                print(f"Failed to decode JSON: {val}. Error: {e}")
+            except json.JSONDecodeError:
+                print(f"Could not decode message: {val}")
+            except Exception as e:
+                print(f"Error in processing loop: {e}")
 
     finally:
+        # Clean shutdown
         c.close()
 
+
 if __name__ == "__main__":
-    # 3. Use the asyncio event loop to start the function
-    asyncio.run(main_loop())
+    try:
+        asyncio.run(main_loop())
+    except KeyboardInterrupt:
+        print("Consumer stopped by user.")

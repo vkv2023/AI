@@ -1,17 +1,12 @@
 global:
-  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+  scrape_interval: 15s
 
-# A scrape configuration for the node exporter
-# In docker/prometheus.yml
-# ...existing code...
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
-  - job_name: 'kafka'
-    static_configs:
-      - targets: ['kafka:9092'] # Assuming Kafka exposes metrics on 9092, adjust if needed
-  - job_name: 'fraud-rag-agent' # New job for your application
-    static_configs:
-      - targets: ['fraud-rag-api:8000'] # Replace <your-app-service-name> with the service name of your FastAPI app in docker-compose.yml
 
+  - job_name: 'fraud-rag-agent'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['fraud-rag-api:8000']
