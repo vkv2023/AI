@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+openai
+weaviate-client>=3.26.7,<=4.20.4
+pytest
+tenacity
+dotenv
+prometheus_client
+aiokafka
