@@ -1,0 +1,174 @@
+2026-04-03 20:46:28 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 20:46:28 - main_fastapi - ERROR - [main_fastapi.py:50] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 47, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 20:50:07 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 20:50:07 - main_fastapi - ERROR - [main_fastapi.py:50] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 47, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 20:52:11 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 20:52:11 - main_fastapi - ERROR - [main_fastapi.py:50] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 47, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 20:53:27 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 20:53:27 - main_fastapi - ERROR - [main_fastapi.py:50] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 47, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /app/../data/NIST_Cybersecurity_Framework.pdf
+2026-04-03 21:04:43 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:04:43 - main_fastapi - ERROR - [main_fastapi.py:52] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /data/NIST_Securityframework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 49, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:11:24 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:11:24 - main_fastapi - ERROR - [main_fastapi.py:52] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /data/NIST_Securityframework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 49, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:13:20 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:13:20 - main_fastapi - ERROR - [main_fastapi.py:52] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /data/NIST_Securityframework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 49, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:19:40 - ImageTextExtractor - ERROR - [ImageTextExtractor.py:63] - ingest_data() - PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:19:40 - main_fastapi - ERROR - [main_fastapi.py:52] - startup_event() - CRITICAL: Ingestion failed: PDF not found at: /data/NIST_Securityframework.pdf
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 49, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 64, in ingest_data
+    raise FileNotFoundError(f"PDF not found at: {file_path}")
+FileNotFoundError: PDF not found at: /data/NIST_Securityframework.pdf
+2026-04-03 21:22:54 - main_fastapi - ERROR - [main_fastapi.py:50] - startup_event() - CRITICAL: Ingestion failed: unsupported operand type(s) for -: 'int' and 'simsimd.DistancesTensor'
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 47, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 75, in ingest_data
+    docs = text_splitter.split_documents(raw_docs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 256, in split_documents
+    return self.create_documents(texts, metadatas=metadatas)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 241, in create_documents
+    for chunk in self.split_text(text):
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 199, in split_text
+    distances, sentences = self._calculate_sentence_distances(single_sentences_list)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 186, in _calculate_sentence_distances
+    return calculate_cosine_distances(sentences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 70, in calculate_cosine_distances
+    similarity = cosine_similarity([embedding_current], [embedding_next])[0][0]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_community/utils/math.py", line 29, in cosine_similarity
+    Z = 1 - simd.cdist(X, Y, metric="cosine")
+        ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for -: 'int' and 'simsimd.DistancesTensor'
+2026-04-03 21:30:25 - main_fastapi - ERROR - [main_fastapi.py:50] - startup_event() - CRITICAL: Ingestion failed: unsupported operand type(s) for -: 'int' and 'simsimd.DistancesTensor'
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 47, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 75, in ingest_data
+    docs = text_splitter.split_documents(raw_docs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 256, in split_documents
+    return self.create_documents(texts, metadatas=metadatas)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 241, in create_documents
+    for chunk in self.split_text(text):
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 199, in split_text
+    distances, sentences = self._calculate_sentence_distances(single_sentences_list)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 186, in _calculate_sentence_distances
+    return calculate_cosine_distances(sentences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 70, in calculate_cosine_distances
+    similarity = cosine_similarity([embedding_current], [embedding_next])[0][0]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_community/utils/math.py", line 29, in cosine_similarity
+    Z = 1 - simd.cdist(X, Y, metric="cosine")
+        ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for -: 'int' and 'simsimd.DistancesTensor'
+2026-04-03 21:35:12 - main_fastapi - ERROR - [main_fastapi.py:50] - startup_event() - CRITICAL: Ingestion failed: unsupported operand type(s) for -: 'int' and 'simsimd.DistancesTensor'
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 47, in startup_event
+    ingest_data(PDF_PATH)
+  File "/app/ImageTextExtractor.py", line 75, in ingest_data
+    docs = text_splitter.split_documents(raw_docs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 256, in split_documents
+    return self.create_documents(texts, metadatas=metadatas)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 241, in create_documents
+    for chunk in self.split_text(text):
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 199, in split_text
+    distances, sentences = self._calculate_sentence_distances(single_sentences_list)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 186, in _calculate_sentence_distances
+    return calculate_cosine_distances(sentences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_experimental/text_splitter.py", line 70, in calculate_cosine_distances
+    similarity = cosine_similarity([embedding_current], [embedding_next])[0][0]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langchain_community/utils/math.py", line 29, in cosine_similarity
+    Z = 1 - simd.cdist(X, Y, metric="cosine")
+        ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for -: 'int' and 'simsimd.DistancesTensor'
+2026-04-03 21:45:29 - main_fastapi - ERROR - [main_fastapi.py:78] - process_query() - Error processing query: 1 validation error for CohereRerank
+__root__
+  Did not find cohere_api_key, please add an environment variable `COHERE_API_KEY` which contains it, or pass `cohere_api_key` as a named parameter. (type=value_error)
+Traceback (most recent call last):
+  File "/app/main_fastapi.py", line 67, in process_query
+    final_output = pipeline_app.invoke(inputs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langgraph/pregel/__init__.py", line 1249, in invoke
+    for chunk in self.stream(
+  File "/usr/local/lib/python3.11/site-packages/langgraph/pregel/__init__.py", line 835, in stream
+    _panic_or_proceed(done, inflight, step)
+  File "/usr/local/lib/python3.11/site-packages/langgraph/pregel/__init__.py", line 1338, in _panic_or_proceed
+    raise exc
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langgraph/pregel/retry.py", line 66, in run_with_retry
+    task.proc.invoke(task.input, task.config)
+  File "/usr/local/lib/python3.11/site-packages/langchain_core/runnables/base.py", line 2499, in invoke
+    input = step.invoke(
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/langgraph/utils.py", line 89, in invoke
+    ret = context.run(self.func, input, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/ImageTextExtractor.py", line 104, in retrieve_and_rerank
+    compressor = CohereRerank(model="rerank-english-v3.0")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/v1/main.py", line 347, in __init__
+    raise validation_error
+pydantic.v1.error_wrappers.ValidationError: 1 validation error for CohereRerank
+__root__
+  Did not find cohere_api_key, please add an environment variable `COHERE_API_KEY` which contains it, or pass `cohere_api_key` as a named parameter. (type=value_error)

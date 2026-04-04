@@ -6,7 +6,7 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'fraud-rag-agent'
+  - job_name: 'image-text-extractor'
     metrics_path: '/metrics'
     static_configs:
-      - targets: ['fraud-rag-api:8000']
+      - targets: ['image-text-extractor-api:8000']
