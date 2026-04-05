@@ -14,6 +14,10 @@ from langchain.retrievers import ContextualCompressionRetriever
 from langgraph.graph import StateGraph, END
 import weaviate
 
+from opentelemetry import trace
+
+tracer = trace.get_tracer(__name__)
+
 load_dotenv()
 
 # Setup Logging - Ensure logs directory exists
@@ -72,8 +76,8 @@ def ingest_data(file_path: str):
     logger.debug("Performing semantic chunking...")
     # text_splitter = SemanticChunker(OpenAIEmbeddings())
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200
+        chunk_size=500,
+        chunk_overlap=50
     )
 
     # docs = text_splitter.split_documents(raw_docs)
@@ -93,7 +97,11 @@ def ingest_data(file_path: str):
 
 
 # 3. GRAPH NODES
+
 def retrieve_and_rerank(state: AgentState):
+    # This creates a segment in your trace specifically for document retrieval
+    with tracer.start_as_current_span("weaviate_retrieval"):
+        logger.debug(f"Retrieving and reranking documents...")
     logger.debug(f"Retrieving and reranking documents for query: {state['question']}")
     
     if retriever is None:

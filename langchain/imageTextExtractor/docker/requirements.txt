@@ -1,18 +1,11 @@
-fastapi
-uvicorn
-openai
-weaviate-client>=3.26.7,<=4.20.4
-pytest
-tenacity
-dotenv
-prometheus_client
-aiokafka
+# --- Web & API ---
 fastapi
 uvicorn
 pydantic
-python-dotenv
-prometheus_client
 PyYAML
+python-dotenv
+
+# --- LLM & Orchestration ---
 langchain==0.1.16
 langchain-community==0.0.32
 langchain-openai
@@ -20,5 +13,27 @@ langchain-weaviate
 langchain-cohere
 langchain-core
 langgraph
-pymupdf
 langchain-experimental
+openai
+
+# --- Vector DB & Data ---
+weaviate-client>=3.26.7,<=4.20.4
+pymupdf
+
+# --- Infrastructure & Messaging ---
+aiokafka
+tenacity
+prometheus_client
+
+# --- OpenTelemetry (Observability) ---
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-instrumentation-fastapi
+opentelemetry-instrumentation-logging
+opentelemetry-instrumentation-openai
+opentelemetry-instrumentation-urllib3
+opentelemetry-exporter-prometheus
+opentelemetry-exporter-otlp
+
+# --- Testing ---
+pytest

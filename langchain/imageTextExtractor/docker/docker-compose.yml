@@ -91,5 +91,14 @@ services:
       - weaviate
 #      - redis
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # Jaeger UI
+      - "4317:4317"   # OTLP gRPC (Where your FastAPI app sends traces)
+      - "4318:4318"   # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
 volumes:
   logs:
