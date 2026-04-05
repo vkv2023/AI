@@ -43,27 +43,46 @@ RAG (Retrieval-Augmented Generation)
 Enterprise Level Structure
 ========================================================
 
-AI/
-│
-├── ingestion/
-│   ├── s3_loader.py
-│   ├── chunker.py
-│   ├── embedder.py
-│   └── indexer.py
-│
-├── search/
-│   ├── retrieve.py
-│   ├── rerank.py
-│   └── answer.py
-│
-├── RAG/
-│   └── rag_project/
+App/
 │
 ├── docker/
-│   └── docker-compose.yml
+│   ├── docker-compose.yml        # Infra (Redis, Weaviate, Kafka)
+│   └── requirements.txt
 │
-├── .env
-├── requirements.txt
+├── data/
+│   └── fraud_cases.json          # Historical fraud dataset
+│
+├── src/
+│   ├── app.py                    # FastAPI entrypoint
+│   ├── configurations.py                 # Env configs (API keys, URLs)
+│   │
+│   ├── orchestrator/
+│   │   └── agent.py              # Main routing logic (RAG vs API)
+│   │
+│   ├── llm_core/
+│   │   └── openai_client.py      # OpenAI integration
+│   │
+│   ├── fraud_rag/
+│   │   ├── embeddings.py         # Embedding generation
+│   │   ├── weaviate_client.py    # Vector DB operations
+│   │   ├── rag_reasoner.py       # Context + prompt builder
+│   │
+│   ├── cache/
+│   │   └── redis_cache.py        # Caching layer
+│   │
+│   ├── ingestion/
+│   │   ├── kafka_consumer.py     # Kafka ingestion service
+│   │   ├── kafka_producer.py     # Send documents/events
+│   │   └── ingest_data.py        # Initial data load
+│   │
+│   ├── services_detect/
+│   │   └── fraud_api.py          # Mock payment/order APIs
+│   │
+│   └── utils/
+│       └── helpers.py            # Common utilities
+    └── tests/
+│       └── test_api.py            # test_api 
+│
 └── README.md
 
 
