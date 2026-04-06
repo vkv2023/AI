@@ -558,3 +558,95 @@ __root__
 2026-04-05 16:25:27 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-04-05 16:25:27 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 3)
 2026-04-05 16:25:27 - main_fastapi - INFO - [main_fastapi.py:96] - process_query() - Query processed. Verified: False
+2026-04-05 16:57:44 - ImageTextExtractor - INFO - [ImageTextExtractor.py:38] - <module>() - Connecting to Weaviate at weaviate
+2026-04-05 16:57:44 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET http://weaviate:8080/v1/.well-known/openid-configuration "HTTP/1.1 404 Not Found"
+2026-04-05 16:57:44 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET http://weaviate:8080/v1/meta "HTTP/1.1 200 OK"
+2026-04-05 16:57:44 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET https://pypi.org/pypi/weaviate-client/json "HTTP/1.1 200 OK"
+2026-04-05 16:57:44 - ImageTextExtractor - INFO - [ImageTextExtractor.py:49] - <module>() - Successfully connected to Weaviate
+2026-04-05 16:57:44 - ImageTextExtractor - INFO - [ImageTextExtractor.py:156] - <module>() - Building LangGraph workflow...
+2026-04-05 16:57:44 - ImageTextExtractor - INFO - [ImageTextExtractor.py:168] - <module>() - LangGraph workflow compiled successfully
+2026-04-05 16:57:44 - main_fastapi - INFO - [main_fastapi.py:50] - <module>() - FastAPI application initialized
+2026-04-05 16:57:44 - main_fastapi - INFO - [main_fastapi.py:69] - startup_event() - Starting up application - Initializing RAG Ingestion for: /app/data/NIST_Securityframework.pdf
+2026-04-05 16:57:44 - ImageTextExtractor - INFO - [ImageTextExtractor.py:62] - ingest_data() - Resolved ingestion file path: /app/data/NIST_Securityframework.pdf
+2026-04-05 16:57:44 - ImageTextExtractor - INFO - [ImageTextExtractor.py:64] - ingest_data() - Starting data ingestion from: /app/data/NIST_Securityframework.pdf
+2026-04-05 16:57:45 - ImageTextExtractor - INFO - [ImageTextExtractor.py:73] - ingest_data() - Loaded 10 documents
+2026-04-05 16:57:45 - ImageTextExtractor - INFO - [ImageTextExtractor.py:85] - ingest_data() - Chunked into 24 semantic chunks
+2026-04-05 16:57:45 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET http://weaviate:8080/v1/schema/SecurityPolicy "HTTP/1.1 404 Not Found"
+2026-04-05 16:57:45 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST http://weaviate:8080/v1/schema "HTTP/1.1 200 OK"
+2026-04-05 16:57:45 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET http://weaviate:8080/v1/schema/SecurityPolicy "HTTP/1.1 200 OK"
+2026-04-05 16:57:51 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-05 16:57:52 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET http://weaviate:8080/v1/schema "HTTP/1.1 200 OK"
+2026-04-05 16:57:52 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET http://weaviate:8080/v1/nodes "HTTP/1.1 200 OK"
+2026-04-05 16:57:53 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: GET http://weaviate:8080/v1/nodes "HTTP/1.1 200 OK"
+2026-04-05 16:57:53 - ImageTextExtractor - INFO - [ImageTextExtractor.py:92] - ingest_data() - Documents successfully stored in Weaviate
+2026-04-05 16:57:53 - ImageTextExtractor - INFO - [ImageTextExtractor.py:95] - ingest_data() - Retriever initialized successfully
+2026-04-05 16:57:53 - main_fastapi - INFO - [main_fastapi.py:72] - startup_event() - Ingestion successful. Vector DB ready.
+2026-04-05 16:59:32 - main_fastapi - INFO - [main_fastapi.py:86] - process_query() - Processing query: security framework
+2026-04-05 16:59:34 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-05 16:59:34 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-05 16:59:34 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-05 16:59:37 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 16:59:37 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-05 16:59:38 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 16:59:38 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 1)
+2026-04-05 16:59:38 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-05 16:59:38 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-05 16:59:38 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-05 16:59:41 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 16:59:41 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-05 16:59:41 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 16:59:41 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 2)
+2026-04-05 16:59:42 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-05 16:59:42 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-05 16:59:42 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-05 16:59:45 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 16:59:45 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-05 16:59:46 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 16:59:46 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 3)
+2026-04-05 16:59:46 - main_fastapi - INFO - [main_fastapi.py:96] - process_query() - Query processed. Verified: False
+2026-04-05 17:04:54 - main_fastapi - INFO - [main_fastapi.py:86] - process_query() - Processing query: NIST
+2026-04-05 17:04:55 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-05 17:04:55 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-05 17:04:55 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-05 17:04:59 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 17:04:59 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-05 17:05:01 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 17:05:01 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 1)
+2026-04-05 17:05:01 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-05 17:05:02 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-05 17:05:02 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-05 17:05:07 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 17:05:07 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-05 17:05:08 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 17:05:08 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 2)
+2026-04-05 17:05:08 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-05 17:05:09 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-05 17:05:09 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-05 17:05:14 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 17:05:14 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-05 17:05:15 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-05 17:05:15 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 3)
+2026-04-05 17:05:15 - main_fastapi - INFO - [main_fastapi.py:96] - process_query() - Query processed. Verified: False
+2026-04-06 01:57:48 - main_fastapi - INFO - [main_fastapi.py:86] - process_query() - Processing query: ANy security which covers data breach
+2026-04-06 01:57:50 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-06 01:57:51 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-06 01:57:51 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-06 01:57:55 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 01:57:55 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-06 01:57:56 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 01:57:56 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 1)
+2026-04-06 01:57:58 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-06 01:57:58 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-06 01:57:58 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-06 01:58:01 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 01:58:01 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-06 01:58:02 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 01:58:02 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 2)
+2026-04-06 01:58:02 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2026-04-06 01:58:03 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.cohere.com/v1/rerank "HTTP/1.1 200 OK"
+2026-04-06 01:58:03 - ImageTextExtractor - INFO - [ImageTextExtractor.py:119] - retrieve_and_rerank() - Retrieved and reranked 3 documents
+2026-04-06 01:58:06 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 01:58:06 - ImageTextExtractor - INFO - [ImageTextExtractor.py:128] - generate_answer() - Answer generated successfully
+2026-04-06 01:58:07 - httpx - INFO - [_client.py:1025] - _send_single_request() - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 01:58:07 - ImageTextExtractor - INFO - [ImageTextExtractor.py:142] - sub_agent_feedback() - Answer validation result: INVALID (Retry count: 3)
+2026-04-06 01:58:07 - main_fastapi - INFO - [main_fastapi.py:96] - process_query() - Query processed. Verified: False
