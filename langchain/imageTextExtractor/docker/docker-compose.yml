@@ -77,19 +77,14 @@ services:
     env_file:
       - ../.env
     environment:
-#      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - WEAVIATE_HOST=weaviate
-#      - REDIS_HOST=redis
       - WEAVIATE_GRPC_HOST=weaviate
       - WEAVIATE_GRPC_PORT=50051
-      # CRITICAL: This tells your code to use the internal Kafka port
-#      - KAFKA_URL=kafka:29092
+      - LOG_DIR=/app/logs
     volumes:
-      - ./logs:/app/logs
+      - ../logs:/app/logs
     depends_on:
-#      - kafka
       - weaviate
-#      - redis
 
   jaeger:
     image: jaegertracing/all-in-one:latest

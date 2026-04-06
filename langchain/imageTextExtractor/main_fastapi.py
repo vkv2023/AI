@@ -36,8 +36,13 @@ provider.add_span_processor(BatchSpanProcessor(jaeger_exporter))
 LoggingInstrumentor().instrument(set_logging_format=True)
 
 # 2. SETUP LOGGING
-log_dir = os.path.join(os.path.dirname(__file__), 'logs')
+# log_dir = os.path.join(os.path.dirname(__file__), 'logs')
+# Use env variable OR fallback
+log_dir = os.getenv("LOG_DIR", os.path.join(os.path.dirname(__file__), 'logs'))
+
 os.makedirs(log_dir, exist_ok=True)
+
+print(f"Logs will be written to: {log_dir}")  # debug
 
 log_config_path = os.path.join(os.path.dirname(__file__), 'logging_config.yaml')
 with open(log_config_path, 'r') as f:
