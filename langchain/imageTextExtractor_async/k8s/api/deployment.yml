@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imageTextExtractor-rag-ai
+  namespace: imageTextExtractor-rag-ai
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: imageTextExtractor-rag-ai
+  template:
+    metadata:
+      labels:
+        app: imageTextExtractor-rag-ai
+    spec:
+      containers:
+      - name: imageTextExtractor-rag-ai
+        image: vashisthavinod/imageTextExtractor-rag-ai:latest   # change this
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8000
+
+        envFrom:
+          - configMapRef:
+              name: rag-config
+
+        env:
+          - name: LOG_DIR
+            value: "/app/logs"
+
+        volumeMounts:
+          - name: logs
+            mountPath: /app/logs
+
+      volumes:
+        - name: logs
+          emptyDir: {}   # ephemeral logs (best practice: stdout)
