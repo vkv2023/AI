@@ -1,5 +1,4 @@
 import os
-import logging
 import logging.config
 import yaml
 from fastapi import FastAPI, Request, HTTPException
@@ -18,39 +17,50 @@ from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 # Import components from your logic file
-# from imagetextextractor_async import ingest_data, pipeline_app
 from src.rag.imagetextextractor_async import ingest_data
 from src.rag.pipeline import pipeline_app
 
 load_dotenv()
 
 # 1. SETUP OPENTELEMETRY (Must happen before FastAPI init)
-resource = Resource.create({"service.name": "imageTextExt-agent"})
+resource = Resource.create({
+    "service.name": os.getenv("OTEL_SERVICE_NAME", "imageTextExt-agent")
+})
+
 provider = TracerProvider(resource=resource)
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
 
-# Point specifically to the Jaeger OTLP gRPC port
-jaeger_exporter = OTLPSpanExporter(endpoint="http://jaeger:4317", insecure=True)
-provider.add_span_processor(BatchSpanProcessor(jaeger_exporter))
+# Use ConfigMap/Env value, fallback to Jaeger service
+
+jaeger_exporter = OTLPSpanExporter(
+    endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://jaeger:4317"),
+    insecure=True
+)
+
+provider.add_span_processor(
+    BatchSpanProcessor(jaeger_exporter)
+)
 
 # Inject trace IDs into logs
 LoggingInstrumentor().instrument(set_logging_format=True)
 
 # 2. SETUP LOGGING
-# log_dir = os.path.join(os.path.dirname(__file__), 'logs')
-# Use env variable OR fallback
-# log_dir = os.getenv("LOG_DIR", os.path.join(os.path.dirname(__file__), 'logs'))
+
 log_dir = os.getenv("LOG_DIR", "/app/logs")
 os.makedirs(log_dir, exist_ok=True)
 
-print(f"Logs will be written to: {log_dir}")  # debug
+print(f"Logs will be written to: {log_dir}")
 
-log_config_path = os.path.join(os.path.dirname(__file__), 'logging_config.yaml')
-with open(log_config_path, 'r') as f:
+# Docker copies logging_config.yaml to /app/
+
+log_config_path = "/app/logging_config.yaml"
+
+with open(log_config_path, "r") as f:
     log_config = yaml.safe_load(f)
+
 logging.config.dictConfig(log_config)
-logger = logging.getLogger('main_fastapi')
+logger = logging.getLogger("main_fastapi")
 
 # 3. INITIALIZE APP
 app = FastAPI(title="Policy Document RAG Agent API")
@@ -67,9 +77,12 @@ app_request_count_total = Counter(
 app_request_count_total.labels(method='POST', endpoint='/query')
 
 # GLOBAL INITIALIZATION
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PDF_PATH = os.path.join(BASE_DIR, "data", "NIST_Securityframework.pdf")
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# PDF_PATH = os.path.join(BASE_DIR, "data", "NIST_Securityframework.pdf")
 
+# Go up two levels from main.py to reach /app/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PDF_PATH = os.path.join(BASE_DIR, "data", "NIST_Securityframework.pdf")
 
 @app.on_event("startup")
 async def startup_event():

@@ -15,12 +15,24 @@ spec:
     spec:
       containers:
       - name: api
-        image: vashisthavinod/image-text-extractor-api:v0
-        ports:
-        - containerPort: 8000
-        envFrom:
-        - configMapRef:
-            name: rag-config
+        image: vashisthavinod/image-text-extractor-api:v5
+        imagePullPolicy: Always
+        env:
+          - name: WEAVIATE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: rag-config
+                key: WEAVIATE_HOST
+          - name: WEAVIATE_HTTP_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: rag-config
+                key: WEAVIATE_HTTP_PORT
+          - name: WEAVIATE_GRPC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: rag-config
+                key: WEAVIATE_GRPC_PORT
         volumeMounts:
         - name: logs
           mountPath: /app/logs

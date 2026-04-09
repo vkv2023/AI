@@ -12,18 +12,18 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_cohere import CohereRerank
 from langchain.retrievers import ContextualCompressionRetriever
 import weaviate
-
 from opentelemetry import trace
+import weaviate.classes.init as wvc
 
 tracer = trace.get_tracer(__name__)
 
 load_dotenv()
 
 # Setup Logging - Ensure logs directory exists
-log_dir = os.path.join(os.path.dirname(__file__), 'logs')
-os.makedirs(log_dir, exist_ok=True)
+# log_config_path = os.path.join(os.path.dirname(__file__), 'logging_config.yaml')
 
-log_config_path = os.path.join(os.path.dirname(__file__), 'logging_config.yaml')
+log_config_path = os.getenv("LOG_CONFIG_PATH", "/app/logging_config.yaml")
+
 with open(log_config_path, 'r') as f:
     log_config = yaml.safe_load(f)
 
@@ -35,12 +35,12 @@ retriever = None
 
 # 1. SETUP WEAVIATE
 logger.info(f"Connecting to Weaviate at {os.environ.get('WEAVIATE_HOST', 'localhost')}")
-
+weaviate_host = os.getenv("WEAVIATE_HOST", "weaviate.image-text-extractor-rag-ai.svc.cluster.local")
 client = weaviate.connect_to_custom(
-    http_host=os.environ.get("WEAVIATE_HOST", "localhost"),
-    http_port=int(os.environ.get("WEAVIATE_PORT", "8080")),
-    grpc_host=os.environ.get("WEAVIATE_HOST", "localhost"),
-    grpc_port=int(os.environ.get("WEAVIATE_GRPC_PORT", "50051")),
+    http_host=os.getenv("WEAVIATE_HOST", "weaviate_host"),
+    http_port=int(os.getenv("WEAVIATE_HTTP_PORT", "8080")),
+    grpc_host=os.getenv("WEAVIATE_HOST", "weaviate_host"),
+    grpc_port=int(os.getenv("WEAVIATE_GRPC_PORT", "50051")),
     http_secure=False,
     grpc_secure=False
 )
@@ -61,7 +61,7 @@ def ingest_data(file_path: str):
     logger.info(f"Resolved ingestion file path: {file_path}")
     global retriever
     logger.info(f"Starting data ingestion from: {file_path}")
-    
+
     if not os.path.exists(file_path):
         logger.error(f"PDF not found at: {file_path}")
         raise FileNotFoundError(f"PDF not found at: {file_path}")
@@ -102,7 +102,7 @@ def retrieve_and_rerank(state: AgentState):
     with tracer.start_as_current_span("weaviate_retrieval"):
         logger.debug(f"Retrieving and reranking documents...")
     logger.debug(f"Retrieving and reranking documents for query: {state['question']}")
-    
+
     if retriever is None:
         logger.error("Retriever not initialized")
         raise ValueError("Retriever not initialized. Ensure ingest_data() is called on startup.")
