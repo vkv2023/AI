@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-text-extractor-api
+  namespace: image-text-extractor-rag-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: image-text-extractor-api
+  template:
+    metadata:
+      labels:
+        app: image-text-extractor-api
+    spec:
+      containers:
+      - name: api
+        image: vashisthavinod/image-text-extractor-api:v0
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: rag-config
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        emptyDir: {}

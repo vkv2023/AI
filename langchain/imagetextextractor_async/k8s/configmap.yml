@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rag-config
-  namespace: imageTextExtractor-rag-ai
+  namespace: image-text-extractor-rag-ai
 data:
   WEAVIATE_HOST: "weaviate"
   WEAVIATE_PORT: "8080"
@@ -13,4 +13,4 @@ data:
 
   # OpenTelemetry → Jaeger
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4317"
-  OTEL_SERVICE_NAME: "imageTextExtractor-rag-agent"
+  OTEL_SERVICE_NAME: "image-text-extractor-rag-agent"

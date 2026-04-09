@@ -18,7 +18,9 @@ from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 # Import components from your logic file
-from ImageTextExtractor_async import ingest_data, pipeline_app
+# from imagetextextractor_async import ingest_data, pipeline_app
+from src.rag.imagetextextractor_async import ingest_data
+from src.rag.pipeline import pipeline_app
 
 load_dotenv()
 

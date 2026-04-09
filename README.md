@@ -1,4 +1,11 @@
 This Directory contains all the work related to RAG, LLM, AI Agents, Generative AI and Agentic AI.
+
+1- ai-platform: This directory contains the code for the RAG system, including the implementation of the vector database, embedding generation, and response generation.
+2- fraud-detection: This directory contains code related to a fraud detection system, which may utilize the RAG system for retrieving relevant information to assist in fraud detection.
+3- hybrid_fraud_rag-agent_async: This directory contains code for an asynchronous agent that combines the RAG system with other techniques for fraud detection.
+4- RAG-agent: This directory contains code for an agent that utilizes the RAG system for various tasks, potentially including fraud detection or other applications.
+5- langchain: This directory contains code related to the LangChain framework, which may be used for building and deploying language models and agents.
+
 ======================================================================================================================================
 RAG (Retrieval-Augmented Generation)
 =========================================================================================================

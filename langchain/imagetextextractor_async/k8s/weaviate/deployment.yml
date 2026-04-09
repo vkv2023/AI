@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weaviate
+  namespace: image-text-extractor-rag-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weaviate
+  template:
+    metadata:
+      labels:
+        app: weaviate
+    spec:
+      containers:
+      - name: weaviate
+        image: cr.weaviate.io/semitechnologies/weaviate:1.27.0
+        ports:
+        - containerPort: 8080
+        - containerPort: 50051
+        env:
+        - name: CLUSTER_HOSTNAME
+          value: "node1"
+        - name: RAFT_BOOTSTRAP_EXPECT
+          value: "1"
+        - name: AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED
+          value: "true"
+        - name: PERSISTENCE_DATA_PATH
+          value: "/var/lib/weaviate"
+        - name: DEFAULT_VECTORIZER_MODULE
+          value: "none"
+        - name: ENABLE_GRPC
+          value: "true"

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jaeger
-  namespace: imageTextExtractor-rag-ai
+  namespace: image-text-extractor-rag-ai
 spec:
   replicas: 1
   selector:
@@ -16,10 +16,10 @@ spec:
       containers:
       - name: jaeger
         image: jaegertracing/all-in-one:latest
-        ports:
-          - containerPort: 16686   # UI
-          - containerPort: 4317    # OTLP gRPC
-          - containerPort: 4318    # OTLP HTTP
         env:
-          - name: COLLECTOR_OTLP_ENABLED
-            value: "true"
+        - name: COLLECTOR_OTLP_ENABLED
+          value: "true"
+        ports:
+        - containerPort: 16686
+        - containerPort: 4317
+        - containerPort: 4318
