@@ -47,7 +47,7 @@ RAG (Retrieval-Augmented Generation)
             gpt-4o (better quality)
 
 ========================================================
-Enterprise Level Structure
+        Enterprise Level Structure
 ========================================================
 
 App/
