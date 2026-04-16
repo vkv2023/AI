@@ -33,9 +33,13 @@ tracer = trace.get_tracer(__name__)
 
 # Use ConfigMap/Env value, fallback to Jaeger service
 
+# jaeger_exporter = OTLPSpanExporter(
+#     endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://jaeger:4317"),
+#     insecure=True
+# )
+
 jaeger_exporter = OTLPSpanExporter(
-    endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://jaeger:4317"),
-    insecure=True
+    endpoint="http://jaeger:4318/v1/traces"
 )
 
 provider.add_span_processor(

@@ -23,6 +23,7 @@ kubectl apply -f k8s/api/api-service.yaml
 # Prometheus
 kubectl apply -f k8s/prometheus/prometheus-config.yaml
 kubectl apply -f k8s/prometheus/prometheus-deployment.yaml
+kubectl apply -f k8s/prometheus/prometheus-service.yaml
 
 echo "Deployment completed successfully!"
 
