@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 3. Copy the rest of the application
 # This will copy 'app/', 'src/', 'data/', etc., into '/app/'
 COPY . .
-
+COPY logging_config.yaml /app/logging_config.yaml
 # 4. Set Environment Variables
 # PYTHONPATH=/app ensures that 'app/main.py' can 'import src.rag...'
 

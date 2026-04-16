@@ -46,9 +46,6 @@ provider.add_span_processor(
     BatchSpanProcessor(jaeger_exporter)
 )
 
-# Inject trace IDs into logs
-LoggingInstrumentor().instrument(set_logging_format=True)
-
 # 2. SETUP LOGGING
 
 log_dir = os.getenv("LOG_DIR", "/app/logs")
@@ -64,7 +61,9 @@ with open(log_config_path, "r") as f:
     log_config = yaml.safe_load(f)
 
 logging.config.dictConfig(log_config)
-logger = logging.getLogger("main_fastapi")
+# Inject trace IDs into logs
+LoggingInstrumentor().instrument(set_logging_format=True)
+logger = logging.getLogger("main")
 
 # 3. INITIALIZE APP
 app = FastAPI(title="Policy Document RAG Agent API")
