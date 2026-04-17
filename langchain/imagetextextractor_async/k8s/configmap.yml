@@ -11,5 +11,5 @@ data:
   WEAVIATE_GRPC_PORT: "50051"
   LOG_DIR: "/app/logs"
 
-  OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "jaeger:4317"
   OTEL_SERVICE_NAME: "image-text-extractor-rag-agent"

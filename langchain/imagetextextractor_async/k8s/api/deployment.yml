@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: vashisthavinod/image-text-extractor-api:v5
+        image: vashisthavinod/image-text-extractor-api:v8
         imagePullPolicy: Always
         env:
           - name: WEAVIATE_HOST

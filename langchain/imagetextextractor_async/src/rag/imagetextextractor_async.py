@@ -27,7 +27,7 @@ log_config_path = os.getenv("LOG_CONFIG_PATH", "/app/logging_config.yaml")
 with open(log_config_path, 'r') as f:
     log_config = yaml.safe_load(f)
 
-logging.config.dictConfig(log_config)
+# logging.config.dictConfig(log_config)
 logger = logging.getLogger('ImageTextExtractor')
 
 # Global reference for the retriever to be shared across graph nodes

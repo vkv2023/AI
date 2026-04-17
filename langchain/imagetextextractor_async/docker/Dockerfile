@@ -21,7 +21,6 @@ COPY logging_config.yaml /app/logging_config.yaml
 
 
 # Ensure the logs directory exists
-RUN mkdir -p /app/logs
 ENV PYTHONPATH=/app
 ENV LOG_DIR=/app/logs
 ENV LOG_CONFIG_PATH=/app/logging_config.yaml
@@ -34,4 +33,5 @@ EXPOSE 8000
 
 # 6. Start the application
 # 'app.main:app' refers to: folder 'app' -> file 'main.py' -> variable 'app'
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+#CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-config", "/app/logging_config.yaml"]

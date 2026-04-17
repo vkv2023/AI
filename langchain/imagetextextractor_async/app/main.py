@@ -12,6 +12,7 @@ from opentelemetry import trace
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
@@ -33,14 +34,15 @@ tracer = trace.get_tracer(__name__)
 
 # Use ConfigMap/Env value, fallback to Jaeger service
 
-# jaeger_exporter = OTLPSpanExporter(
-#     endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://jaeger:4317"),
-#     insecure=True
-# )
-
 jaeger_exporter = OTLPSpanExporter(
-    endpoint="http://jaeger:4318/v1/traces"
+    endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "jaeger:4317"),
+    insecure=True
 )
+
+
+# jaeger_exporter = OTLPSpanExporter(
+#     endpoint="http://jaeger:4318/v1/traces"
+# )
 
 provider.add_span_processor(
     BatchSpanProcessor(jaeger_exporter)
@@ -54,16 +56,19 @@ os.makedirs(log_dir, exist_ok=True)
 print(f"Logs will be written to: {log_dir}")
 
 # Docker copies logging_config.yaml to /app/
-
 log_config_path = "/app/logging_config.yaml"
 
 with open(log_config_path, "r") as f:
     log_config = yaml.safe_load(f)
 
+# Inject dynamic log paths
+log_config["handlers"]["file"]["filename"] = os.path.join(log_dir, "app.log")
+log_config["handlers"]["error_file"]["filename"] = os.path.join(log_dir, "error.log")
 logging.config.dictConfig(log_config)
+logger = logging.getLogger("main")
+
 # Inject trace IDs into logs
 LoggingInstrumentor().instrument(set_logging_format=True)
-logger = logging.getLogger("main")
 
 # 3. INITIALIZE APP
 app = FastAPI(title="Policy Document RAG Agent API")

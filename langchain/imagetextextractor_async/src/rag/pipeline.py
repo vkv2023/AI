@@ -9,10 +9,9 @@ from src.rag.imagetextextractor_async import (
     AgentState
 )
 
-logger = logging.getLogger('Pipeline')
-
-
+logger = logging.getLogger('pipeline')
 logger.info("Building LangGraph workflow...")
+
 workflow = StateGraph(AgentState)
 workflow.add_node("retrieve", retrieve_and_rerank)
 workflow.add_node("generate", generate_answer)
