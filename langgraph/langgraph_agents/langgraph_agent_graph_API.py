@@ -1,23 +1,43 @@
 import os
-from datetime import datetime
-
 from dotenv import load_dotenv
 from langchain.tools import tool
 from langchain_openai import ChatOpenAI
+import tiktoken
+
+# from langchain.chat_models import init_chat_model
+# model = init_chat_model("gpt-5-nano")
+# response = model.invoke("Hello!")
+
+MAX_TOKENS = 1200
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+LANGCHAIN_TRACING_V2 = os.getenv("LANGCHAIN_TRACING_V2")
+LANGCHAIN_PROJECT = os.getenv("LANGCHAIN_PROJECT")
+LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
 
-model = ChatOpenAI(model_name="gpt-4o",
+print("LangSmith Key:", LANGCHAIN_API_KEY)
+
+model = ChatOpenAI(model_name="gpt-5-nano",
                    openai_api_key=OPENAI_API_KEY,
-                   temperature=0)
+                   temperature=0,
+                   max_tokens=MAX_TOKENS)
 
-#Define tools
+
+def trim_to_tokens(text, max_tokens=1200, model="gpt-5-nano"):
+    enc = tiktoken.encoding_for_model(model)
+    tokens = enc.encode(text)
+
+    return enc.decode(tokens[:max_tokens])
+
+
+# Define tools
 @tool
 def multiply(a: int, b: int) -> int:
     """Multiply two numbers and return the result."""
-    return a*b
+    return a * b
+
 
 @tool
 def add_numbers(a: int, b: int) -> int:
@@ -28,25 +48,26 @@ def add_numbers(a: int, b: int) -> int:
 @tool
 def divide(a: int, b: int) -> float:
     """Divide numbers and return the result."""
-    return a/b
+    return a / b
 
 
-#Augment the LLM with tools using LangGraph
+# Augment the LLM with tools using LangGraph
 tools = [multiply, add_numbers, divide]
 tools_by_name = {tool.name: tool for tool in tools}
 model_with_tools = model.bind_tools(tools)
 
-#Define the State schema
+# Define the State schema
 from langchain.messages import AnyMessage
 from typing_extensions import TypedDict, Annotated
 import operator
+
 
 class CalculatorState(TypedDict):
     messages: Annotated[list[AnyMessage], operator.add]  # dont overwrite the message history, append to it
     llm_calls: int
 
 
-#Define model node
+# Define model node
 from langchain.messages import SystemMessage
 
 
@@ -65,6 +86,7 @@ def llm_call(state: CalculatorState) -> CalculatorState:
         ],
         "llm_calls": state.get('llm_calls', 0) + 1
     }
+
 
 # Step 4: Define tool node
 from langchain_core.messages import ToolMessage
@@ -90,12 +112,13 @@ def tool_node(state: CalculatorState) -> CalculatorState:
     return {"messages": result}
 
 
-# Step 5: Define logic to determine whether to end  the graph or not
+# Define logic to determine whether to end  the graph or not
 from langgraph.graph import StateGraph, START, END
 from typing import Literal
 
 
-# Conditional edge function to route to the tool node or end based upon whether the LLM made a tool call
+# Conditional edge function to route to the tool node or
+# end based upon whether the LLM made a tool call
 def should_continue(state: CalculatorState) -> Literal["tool_node", END]:
     """Route to tool or end based on LLM output"""
 
@@ -108,11 +131,10 @@ def should_continue(state: CalculatorState) -> Literal["tool_node", END]:
     return END
 
 
-# Step 6: Build agent
-# Build workflow
+# Build agent workflow
 
 agent_builder = StateGraph(CalculatorState)
-#Add nodes
+# Add nodes
 agent_builder.add_node("llm_call", llm_call)
 agent_builder.add_node("tool_node", tool_node)
 
@@ -129,13 +151,15 @@ agent_builder.add_edge("tool_node", "llm_call")
 agent = agent_builder.compile()
 
 from IPython.display import Image, display
+
 # Show the agent
 with open("images/agent_graph_API.png", "wb") as f:
-    f.write(agent.get_graph(xray=True).draw_mermaid_png())
+    f.write(agent.get_graph(xray=True).draw_mermaid_png(max_retries=5, retry_delay=2.0))
     # display(Image(agent.get_graph(xray=True).draw_mermaid_png()))
 
-# ---- 8. Run ----
+# ---- Run ----
 from langchain.messages import HumanMessage
+
 if __name__ == "__main__":
     while True:
         user_input = input("\nEnter your query (type 'exit' to quit): ")
@@ -143,8 +167,17 @@ if __name__ == "__main__":
             print("Exiting...")
             break
 
-        messages = [HumanMessage(content=user_input)]
+        trimmed_input = trim_to_tokens(user_input, 1200)
+
+        messages = [HumanMessage(content=trimmed_input)]
         result = agent.invoke({"messages": messages})
+
+        # messages = [HumanMessage(content=user_input)]
+        # result = agent.invoke({"messages": messages})
+
+        last_message = result["messages"][-1]
+        # Token count and metadata
+        print(last_message.usage_metadata)
 
         print("\nAgent Response:")
         for m in result["messages"]:
